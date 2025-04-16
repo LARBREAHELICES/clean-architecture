@@ -1,0 +1,34 @@
+services:
+  web:
+    build: .
+    container_name: fastapi_app
+    env_file: api/.env
+    volumes:
+      - ./api:/app
+    ports:
+      - "8888:8000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - "8087:8080"
+
+volumes:
+  postgres_data:
