@@ -8,7 +8,7 @@ from app.domain.models import User # logique métier
 # user_2 = User(username="Alice", age=45, bonus = 1)
 # user_3 = User(username="Bernard", age=45, bonus =0)
 
-engine = create_engine("postgresql://admin:password@db/db")
+engine = create_engine("postgresql://sofiene:@127.0.0.1:5432/clean_archi")
 
 SQLModel.metadata.create_all(engine)
 
