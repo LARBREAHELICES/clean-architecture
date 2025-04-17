@@ -5,13 +5,13 @@ from pydantic import BaseModel
 from typing import List
 from sqlmodel import SQLModel
 
-from app.infrastructure.db import SessionDep, engine
+from app.infrastructure.db import SessionDep, engine, get_session, Session
 from app.infrastructure.user_repository import UserRepository
 from app.domain.user_service import UserService
 from app.domain.models import User  # ton modèle SQLModel
 
 # Création des tables au démarrage
-SQLModel.metadata.create_all(bind=engine)
+SQLModel.metadata.create_all(engine)
 
 app = FastAPI()
 
@@ -26,14 +26,21 @@ class UserOut(BaseModel):
     bonus: int
 
 # Dépendance FastAPI pour obtenir le service
-def get_user_service():
-    db = SessionDep()
-    try:
-        repo = UserRepository(db)
+# def get_user_service():
+#     db = SessionDep()
+#     try:
+#         repo = UserRepository(db)
         
-        return UserService(repo)
-    finally:
-        db.close()
+#         return UserService(repo)
+#     finally:
+#         db.close()
+
+# on utilise la session pour utiliser le repository et faire les requete vers la db
+# ensuite on utilise le repo dans le service.
+def get_user_service(session: Session = Depends(get_session)):
+    repo = UserRepository(session)
+    
+    return UserService(repo)
 
 
 @app.get("/", tags=["Root"])

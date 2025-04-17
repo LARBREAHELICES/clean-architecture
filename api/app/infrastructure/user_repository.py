@@ -18,3 +18,4 @@ class UserRepository:
         users = self.session.exec(statement).all()
         
         return users
+    
