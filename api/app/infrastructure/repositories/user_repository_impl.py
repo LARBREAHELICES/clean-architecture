@@ -1,9 +1,12 @@
 from sqlmodel import Session
 from typing import List
 from app.domain.models.user import User
-from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol as UserRepository
+from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol 
 
-class UserRepositoryImpl(UserRepository):
+"""
+L'infrastructure implémente l'interface et fait concrètement les requêtes
+"""
+class UserRepositoryImpl(UserServiceProtocol):
     def __init__(self, session: Session):
         self.session = session
 
@@ -15,3 +18,8 @@ class UserRepositoryImpl(UserRepository):
 
     def list_users(self) -> List[User]:
         return self.session.query(User).all()
+    
+    def get_user_by_id(self, user_id: int) -> User| None:
+        
+        return self.session.query(User).where(User.id == user_id).first()
+    

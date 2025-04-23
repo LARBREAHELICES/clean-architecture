@@ -4,6 +4,9 @@ from app.domain.models.user import User
 from app.infrastructure.db.database import SessionLocal
 from app.infrastructure.repositories.user_repository_impl import UserRepositoryImpl
 
+from app.infrastructure.repositories.user_fake_repository_impl import UserFakeRepositoryImpl
+
+
 from sqlmodel import Session
 
 router = APIRouter()
@@ -19,8 +22,8 @@ def get_db():
 # Créer un utilisateur
 @router.post("/users", response_model=User)
 def create_user(user: User, db: Session = Depends(get_db)):
-    user_repository = UserRepositoryImpl(db)
-    user_service = UserService(user_repository)
+    user_repository = UserRepositoryImpl(db) # connexion à l'infrastructure
+    user_service = UserService(user_repository) # le servie à besoin de la dépendance user_repository
     return user_service.create_user(user)
 
 # Obtenir un utilisateur par ID
@@ -36,3 +39,11 @@ def list_users(db: Session = Depends(get_db)):
     user_repository = UserRepositoryImpl(db)
     user_service = UserService(user_repository)
     return user_service.list_users()
+
+# Lister tous les utilisateurs
+@router.get("/fake/users")
+def list_fake_users():
+    user_repository = UserFakeRepositoryImpl()
+    user_service = UserService(user_repository)
+    
+    return  user_service.list_users()
