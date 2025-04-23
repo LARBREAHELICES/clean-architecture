@@ -3,11 +3,10 @@ from app.domain.services.user_service import UserService
 from app.domain.models.user import User
 from app.infrastructure.db.database import SessionLocal
 from app.infrastructure.repositories.user_repository_impl import UserRepositoryImpl
-
 from app.infrastructure.repositories.user_fake_repository_impl import UserFakeRepositoryImpl
-
-
 from sqlmodel import Session
+
+from typing import List
 
 router = APIRouter()
 
@@ -34,16 +33,17 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
     return user_service.get_user_by_id(user_id)
 
 # Lister tous les utilisateurs
-@router.get("/users", response_model=list[User])
+@router.get("/users", response_model=List[User])
 def list_users(db: Session = Depends(get_db)):
     user_repository = UserRepositoryImpl(db)
     user_service = UserService(user_repository)
     return user_service.list_users()
 
 # Lister tous les utilisateurs
-@router.get("/fake/users")
+@router.get("/fake/users", response_model=List[User])
 def list_fake_users():
     user_repository = UserFakeRepositoryImpl()
+    # le fait de changer de UserFakeRepositoryImpl ne change pas le service
     user_service = UserService(user_repository)
     
     return  user_service.list_users()
