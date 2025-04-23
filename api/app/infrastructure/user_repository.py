@@ -1,6 +1,6 @@
 
 from sqlmodel import Session, select
-from app.domain.models import User
+from DATA.FastAPI.api.app.domain.models.User import User
 
 class UserRepository:
     def __init__(self, session: Session):

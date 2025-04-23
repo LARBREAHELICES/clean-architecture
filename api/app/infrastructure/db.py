@@ -2,7 +2,7 @@ from fastapi import Depends
 from sqlmodel import Session, SQLModel, create_engine
 from typing import Annotated, Optional
 
-from app.domain.models import User # logique métier 
+from DATA.FastAPI.api.app.domain.models.User import User # logique métier 
 
 # user_1 = User(username="Deadpond", age=45, bonus=0)
 # user_2 = User(username="Alice", age=45, bonus = 1)

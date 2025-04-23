@@ -1,4 +1,4 @@
-from app.domain.models import User
+from DATA.FastAPI.api.app.domain.models.User import User
 
 class UserService:
     def __init__(self, user_repo):
