@@ -1,17 +1,16 @@
-from DATA.FastAPI.api.app.domain.models.User import User
+from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
+from app.domain.models.user import User
+from app.domain.repositories.user_repository import UserRepository
 
-class UserService:
-    def __init__(self, user_repo):
-        self.user_repo = user_repo # c'est genre une interface documentée
+class UserService(UserServiceProtocol):
+    def __init__(self, user_repository: UserRepository):
+        self.user_repository = user_repository
 
-    def create_user(self, username: str, age: int) -> User:
-        # logique métier 
-        if age > 18:
-            bonus = 1
-        else:
-            bonus = 0
-        return self.user_repo.create(User(username=username, age=age, bonus=bonus))
+    def create_user(self, user: User) -> User:
+        return self.user_repository.create(user)
 
-    def get_all_users(self):
-        
-        return self.user_repo.list_users()
+    def get_user_by_id(self, user_id: int) -> User:
+        return self.user_repository.get_by_id(user_id)
+
+    def list_users(self) -> list[User]:
+        return self.user_repository.list_users()
