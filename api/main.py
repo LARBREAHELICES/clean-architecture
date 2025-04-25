@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # app/main.py
 
 from fastapi import FastAPI, Depends
@@ -56,3 +57,12 @@ def create_user(user: UserIn, service: UserService = Depends(get_user_service)):
 def list_users(service: UserService = Depends(get_user_service)):
     
     return service.get_all_users()
+=======
+from fastapi import FastAPI
+from app.application.controllers.user_controller import router as user_router
+
+app = FastAPI()
+
+# Inclure les routes utilisateur
+app.include_router(user_router, prefix="/api")
+>>>>>>> upstream/main
