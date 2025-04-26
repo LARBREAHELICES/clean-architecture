@@ -23,3 +23,6 @@ class UserRepositoryImpl(UserServiceProtocol):
         
         return self.session.query(User).where(User.id == user_id).first()
     
+    def get_users_by_category(self, category: str) -> List[User]:
+        return self.session.query(User).where(User.category == category).all()
+    
