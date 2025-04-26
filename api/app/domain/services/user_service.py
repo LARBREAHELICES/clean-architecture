@@ -18,3 +18,7 @@ class UserService:
     def sum_bonus(self, coeff : float = 1.1) -> int:
         # logique métier on augmente de 10% les bonus
         return sum( user.bonus*coeff for user in self.list_users()) 
+    
+       # methode heriter de l'interface (obligatoir pour la logique metier)
+    def get_users_by_category(self, category: str) -> list[User]:
+        return self.user_repository.get_users_by_category(category)
