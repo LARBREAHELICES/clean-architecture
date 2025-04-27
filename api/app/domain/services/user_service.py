@@ -26,7 +26,5 @@ class UserService:
     
     def list_terms_for_user(self, user_id: int) -> UserResponse:
         # Récupérer l'utilisateur et ses termes
-        user = self.user_repository.get_user_by_id_with_terms(user_id)
+        return self.user_repository.list_terms_for_user(user_id)
         
-        # Retourner un UserResponse avec les termes associés
-        return UserResponse(id=user.id, username=user.username, bonus=user.bonus, terms=user.terms)

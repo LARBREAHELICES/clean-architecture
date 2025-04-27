@@ -2,6 +2,7 @@ from sqlmodel import Session
 
 from typing import List
 from app.domain.models.User import User
+from app.domain.models.UserResponse import UserResponse
 from app.infrastructure.db.models.UserDB import UserDB
 from app.infrastructure.db.mappers.user_mapper import UserMapper
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
@@ -34,7 +35,7 @@ class UserRepositoryImpl(UserServiceProtocol):
         
         return UserMapper.to_domain(user_db)
     
-    def get_user_by_id_with_terms(self, user_id: int):
+    def list_terms_for_user(self, user_id: int)->UserResponse:
         user_db = self.session.query(UserDB).where(UserDB.id == user_id).first()
         
         return UserReponseMapper.to_domain(user_db) 

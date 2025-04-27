@@ -21,6 +21,13 @@ engine = create_engine(DATABASE_URL)
 def SessionLocal() -> Session:
     return Session(bind=engine)
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 # Créer les tables
 def create_db():
     SQLModel.metadata.create_all(bind=engine)
