@@ -1,5 +1,6 @@
 from typing import Protocol
 from app.domain.models.User import User
+from app.domain.models.UserResponse import UserResponse
 from typing import List
 
 """
@@ -17,3 +18,5 @@ class UserServiceProtocol(Protocol):
     def list_users(self) -> List[User]:
         ...
         
+    def get_user_by_id_with_terms(self) -> List[UserResponse]:
+        ...

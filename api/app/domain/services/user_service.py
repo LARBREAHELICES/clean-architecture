@@ -1,7 +1,7 @@
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
 from app.domain.models.User import User
+from app.domain.models.UserResponse import UserResponse
 from app.domain.models.Term import Term
-from app.domain.models.TermResponse import UserResponse, TermResponse
 
 
 from typing import List
@@ -26,7 +26,7 @@ class UserService:
     
     def list_terms_for_user(self, user_id: int) -> UserResponse:
         # Récupérer l'utilisateur et ses termes
-        user = self.get_user_by_id(user_id)
-        terms = [TermResponse(id=term.id, name=term.name) for term in user.terms]
+        user = self.user_repository.get_user_by_id_with_terms(user_id)
+        
         # Retourner un UserResponse avec les termes associés
-        return UserResponse(username=user.username, bonus=user.bonus, terms=terms)
+        return UserResponse(id=user.id, username=user.username, bonus=user.bonus, terms=user.terms)
