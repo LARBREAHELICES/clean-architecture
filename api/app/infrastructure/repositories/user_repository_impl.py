@@ -1,6 +1,6 @@
 from sqlmodel import Session
 from typing import List
-from app.domain.models.user import User
+from app.domain.models.User import User
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol 
 
 """

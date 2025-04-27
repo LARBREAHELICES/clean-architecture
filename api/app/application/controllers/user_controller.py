@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from app.domain.services.user_service import UserService
-from app.domain.models.user import User
+from app.domain.models.User import User
 from app.infrastructure.db.database import SessionLocal
 from app.infrastructure.repositories.user_repository_impl import UserRepositoryImpl
 from app.infrastructure.repositories.user_fake_repository_impl import UserFakeRepositoryImpl
@@ -19,17 +19,19 @@ def get_db():
         db.close()
 
 # Créer un utilisateur
-@router.post("/users", response_model=User)
+@router.post("/user/create", response_model=User)
 def create_user(user: User, db: Session = Depends(get_db)):
     user_repository = UserRepositoryImpl(db) # connexion à l'infrastructure
     user_service = UserService(user_repository) # le servie à besoin de la dépendance user_repository
+    
     return user_service.create_user(user)
 
 # Obtenir un utilisateur par ID
-@router.get("/users/{user_id}", response_model=User)
+@router.get("/user/{user_id}", response_model=User)
 def get_user(user_id: int, db: Session = Depends(get_db)):
     user_repository = UserRepositoryImpl(db)
     user_service = UserService(user_repository)
+    
     return user_service.get_user_by_id(user_id)
 
 # Lister tous les utilisateurs
@@ -37,6 +39,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
 def list_users(db: Session = Depends(get_db)):
     user_repository = UserRepositoryImpl(db)
     user_service = UserService(user_repository)
+    
     return user_service.list_users()
 
 # Lister tous les utilisateurs

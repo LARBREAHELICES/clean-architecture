@@ -1,5 +1,5 @@
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
-from app.domain.models.user import User
+from app.domain.models.User import User
 
 # tu hérites de UserServiceProtocol qui est l'interface
 class UserService:
@@ -10,7 +10,7 @@ class UserService:
         return self.user_repository.create(user)
 
     def get_user_by_id(self, user_id: int) -> User:
-        return self.user_repository.get_by_id(user_id)
+        return self.user_repository.get_user_by_id(user_id)
 
     def list_users(self) -> list[User]:
         return self.user_repository.list_users()

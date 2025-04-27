@@ -1,7 +1,6 @@
 from typing import List
-from app.domain.models.user import User
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol 
-from app.domain.models.user import User
+from app.domain.models.User import User
 
 users = [
     {"id": 1, "username": "john_doe", "bonus": 50},

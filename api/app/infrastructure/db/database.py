@@ -3,7 +3,7 @@ from sqlmodel import Session, create_engine, SQLModel
 from dotenv import load_dotenv
 import os
 
-from app.domain.models.user import User 
+from app.domain.models.User import User 
 
 # Charger les variables d'environnement à partir du fichier .env
 load_dotenv()

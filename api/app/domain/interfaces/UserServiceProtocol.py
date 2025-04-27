@@ -1,5 +1,5 @@
 from typing import Protocol
-from app.domain.models.user import User
+from app.domain.models.User import User
 from typing import List
 
 """

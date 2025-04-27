@@ -11,7 +11,7 @@ from sqlmodel import SQLModel  # Importer SQLModel
 load_dotenv()
 
 # Importer ton modèle principal ou tous les modèles utilisés
-from app.domain.models.user import User  
+from app.domain.models.User import User  
 
 # Config Alembic
 config = context.config
@@ -19,7 +19,30 @@ fileConfig(config.config_file_name)
 
 # Charger l’URL de la base de données depuis .env
 DATABASE_URL = os.getenv("DATABASE_URL")
+if DATABASE_URL is None:
+    raise ValueError("DATABASE_URL n'est pas défini dans .env")
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
 # Associer les métadonnées de SQLModel
 target_metadata = SQLModel.metadata
+
+def run_migrations_online() -> None:
+    """Exécute les migrations en mode 'online'."""
+    connectable = engine_from_config(
+        config.get_section(config.config_ini_section),
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
+    )
+
+    with connectable.connect() as connection:
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+            compare_type=True,  # (optionnel : pour détecter changement de types)
+        )
+
+        with context.begin_transaction():
+            context.run_migrations()
+
+# Lancer les migrations
+run_migrations_online()
