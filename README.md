@@ -1,132 +1,220 @@
-### ✅ Exercice 1 : Création d’un utilisateur (logique métier)
+# 🏛 Structure générale
 
-> Implémentez un système de création d’utilisateur avec les règles suivantes :
-
-- Un utilisateur a un **nom** et un **âge**.
-- Si son âge est **strictement supérieur à 18**, il possède **1 bitcoin**.
-- Si son âge est **inférieur ou égal à 18**, il possède **0.01 bitcoin**.
-- Si son âge est **strictement supérieur à 50**, il **multiplie ses bitcoins par 1.002**.
-
-👉 **Contraintes :**
-- Respectez la **séparation** entre **logique métier** et **infrastructure**.
-- Ne pas utiliser d’interface formelle, mais garder une structure claire (ex: service + repository).
-
----
-
-### ✅ Exercice 2 : Analyse critique
-
-> Reprenez l’un de vos projets existants et :
-
-- Analysez la **structure actuelle**.
-- Identifiez si la **logique métier est bien séparée** de l’infrastructure (accès base de données, FastAPI, etc.).
-- Si ce n’est pas le cas, proposez une refactorisation ou notez ce que vous amélioreriez.
-
-
-```txt
-/app
-  /domain
-    /models
-      user.py
-    /repositories
-      user_repository.py
-    /services
-      user_service.py
-    /interface
-      user_service_protocol.py
-  /infrastructure
-    /db
-      database.py
-    /repositories
-      user_repository_impl.py
-  /application
-    /controllers
-      user_controller.py
 ```
-
-
-
-### 🌱 `domain` — le cœur métier (pas de dépendances externes)
-C’est ici que vit la **logique métier**.  
-
-#### 📁 `models/user.py`  
-Contient la classe `User`, héritée de `SQLModel`. Elle décrit les **données** de ton domaine (ex : nom, email...).
-
-#### 📁 `repositories/user_repository.py`  
-Contient une **interface abstraite** (via `Protocol`) qui décrit ce qu’un `UserRepository` doit faire (ex : `create_user`, `get_user_by_id`), **sans implémentation**.
-
-#### 📁 `services/user_service.py`  
-Contient la **logique métier**. Ce fichier utilise un `UserRepository` (via l’interface) pour appliquer des règles métier :  
-> Par exemple : "Créer un utilisateur seulement s’il n’existe pas".
-
-#### 📁 `interfaces/UserServiceProtocol.py`  
-Tu y déclares les **protocols (interfaces)** métiers. Ici, le contrat que doit suivre un `UserService`.
-
----
-
-### 🏗️ `infrastructure` — les détails techniques
-Ici, tu lies ton code à des outils concrets (PostgreSQL, SQLModel...).
-
-#### 📁 `db/database.py`  
-Configure la base de données (moteur, session, création des tables).
-
-#### 📁 `db/models/user_db.py`  
-(Optionnel ici) Sert à faire des **DTO/ORM spécialisés** si besoin. Tu peux l’unifier avec `domain.models.user` si c’est simple.
-
-#### 📁 `repositories/user_repository_impl.py`  
-L’**implémentation concrète** de l’interface `UserRepository`, avec SQLModel.  
-> Ce fichier parle **à la base** : insertions, requêtes…
-
----
-
-### 🚦 `application` — gestion de l'I/O (web, CLI…)
-Contient les **routes, contrôleurs**, ce qui connecte le monde extérieur à ton domaine.
-
-#### 📁 `controllers/user_controller.py`  
-Fichier FastAPI avec les **routes** (ex : `POST /users`).  
-Il récupère les requêtes, utilise le `UserService`, retourne la réponse.
-
----
-
-### 🌍 `interfaces` — pour regrouper les I/O (optionnel)
-Tu as un dossier `interfaces/controllers`, mais ce que tu appelles `application/controllers` semble être la même chose. Tu peux fusionner ou choisir l’un.
-
----
-
-### 🔌 Lien entre tout ça :
-
-```mermaid
-graph TD
-    UI[FastAPI Route] --> CONTROLLER[user_controller]
-    CONTROLLER --> SERVICE[UserService]
-    SERVICE --> REPO[UserRepository (Protocol)]
-    REPO --> IMPL[UserRepositoryImpl (SQLModel)]
-    IMPL --> DB[(Database)]
+app/
+├── application/
+│   └── api/
+├── domain/
+│   ├── models/
+│   ├── services/
+│   └── interfaces/
+├── infrastructure/
+│   ├── db/  
+│   └── repositories/
+└── main.py
 ```
 
 ---
 
-### Ports et adapteurs 
+# 📂 `domain/` — **Le cœur métier**
 
-Dans l'architecture **Clean Architecture**, les **adaptateurs** se trouvent généralement dans la couche **infrastructure**, car ce sont eux qui "adaptent" les appels de la logique métier aux implémentations spécifiques des technologies sous-jacentes (comme la base de données, les services externes, etc.).
+> ❗ C'est indépendant de tout : pas de base de données, pas de FastAPI ici.
 
-Cependant, dans l'**application** (la couche **application**), il n'y a pas directement d'adaptateurs. À la place, cette couche utilise **les interfaces (ou ports)** définis dans la couche **domaine** pour communiquer avec les implémentations concrètes des **adaptateurs** qui se trouvent dans l'infrastructure.
+- **models/** : définitions des entités (ex: `User`, `Term`, ...).
+  ```python
+  # domain/models/User.py
+  from dataclasses import dataclass
+  from typing import Optional
 
-### Résumé des couches :
+  @dataclass
+  class User:
+      id: Optional[int] 
+      username: str
+      bonus: int
+  ```
 
-1. **Domaine** : Contient les **interfaces (ports)** qui définissent les comportements attendus par la logique métier. Par exemple, `UserRepositoryProtocol` définit les méthodes que doit exposer un repository (comme `create_user`, `get_user_by_id`).
-  
-2. **Application** : Utilise ces interfaces (ports) pour implémenter des cas d'utilisation ou des services qui manipulent les données via ces interfaces. Par exemple, `UserService` utilise `UserRepositoryProtocol` pour créer un utilisateur, mais ne sait pas comment exactement les données sont stockées.
+- **services/** : logique métier.
+  ```python
+  # domain/services/user_service.py
+  from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
+  from app.domain.models.User import User
+  from app.domain.models.UserResponse import UserResponse
+  from app.domain.models.Term import Term
 
-3. **Infrastructure** : C'est là que l'**adaptateur** (comme `UserRepositoryImpl`) est défini. Cet adaptateur implémente les interfaces définies dans le domaine et contient la logique spécifique aux bases de données (par exemple avec SQLModel) ou à d'autres services externes.
 
-### Exemple simplifié :
+  from typing import List
 
-- **Port (interface)** : `UserRepositoryProtocol` (dans le domaine) définit la méthode `create_user`.
-  
-- **Service (application)** : `UserService` (dans l'application) dépend de l'interface `UserRepositoryProtocol` et appelle `create_user`.
+  # tu hérites de UserServiceProtocol qui est l'interface
+  class UserService:
+      def __init__(self, user_repository: UserServiceProtocol):
+          self.user_repository = user_repository
 
-- **Adaptateur (infrastructure)** : `UserRepositoryImpl` (dans l'infrastructure) implémente `UserRepositoryProtocol` et fait les appels nécessaires à la base de données.
+      def create_user(self, user: User) -> User:
+          return self.user_repository.create(user)
 
-Donc, **l'adaptateur** se trouve dans **l'infrastructure**, et **l'application** interagit uniquement avec les interfaces (ports), sans connaître l'implémentation concrète.
+      def get_user_by_id(self, user_id: int) -> User:
+          return self.user_repository.get_user_by_id(user_id)
 
-Dans l'application, tu peux avoir des cas d'utilisation ou des services comme `UserService`, mais **l'adaptateur** reste dans la couche **infrastructure**.
+      def list_users(self) -> list[User]:
+          return self.user_repository.list_users()
+      
+      def sum_bonus(self, coeff : float = 1.1) -> int:
+          # logique métier on augmente de 10% les bonus
+          return sum( user.bonus*coeff for user in self.list_users()) 
+      
+      def list_terms_for_user(self, user_id: int) -> UserResponse:
+          # Récupérer l'utilisateur et ses termes
+          return self.user_repository.list_terms_for_user(user_id)
+        
+  ```
+
+- **interfaces/** : **Protocol** (interfaces abstraites).
+  ```python
+  from typing import Protocol
+  from app.domain.models.User import User
+  from app.domain.models.UserResponse import UserResponse
+  from typing import List
+
+  """
+  Comportement utiliser par le domaine => 3 méthodes à implémenter 
+  Pas de dépendances avec l'infrastructure 
+  """
+
+  class UserServiceProtocol(Protocol):
+      def create_user(self, user: User) -> User:
+          ...
+      
+      def get_user_by_id(self, user_id: int) -> User | None:
+          ...
+      
+      def list_users(self) -> List[User]:
+          ...
+          
+      def get_user_by_id_with_terms(self) -> UserResponse:
+          ...
+  ```
+
+---
+
+# 📂 `infrastructure/` — **La partie technique**
+
+> ❗ Cela implémente concrètement ce que le domaine demande.
+
+- **db/** : connexion BDD, schémas SQLModel.
+  ```python
+  # infrastructure/db/database.py
+  # app/infrastructure/db/database.py
+  from sqlmodel import Session, create_engine, SQLModel
+  from dotenv import load_dotenv
+  import os
+
+  # ⚡ On importe les modèles d'infrastructure !
+  from app.infrastructure.db.models.UserDB import UserDB
+  from app.infrastructure.db.models.TermDB import TermDB
+  from app.infrastructure.db.models.User_Term_DB import User_Term_DB
+
+  # Charger les variables d'environnement
+  load_dotenv()
+
+  # Récupérer l'URL de la base
+  DATABASE_URL = os.getenv("DATABASE_URL")
+
+  # Créer un moteur
+  engine = create_engine(DATABASE_URL)
+
+  # Session locale
+  def SessionLocal() -> Session:
+      return Session(bind=engine)
+
+  def get_db():
+      db = SessionLocal()
+      try:
+          yield db
+      finally:
+          db.close()
+
+  # Créer les tables
+  def create_db():
+      SQLModel.metadata.create_all(bind=engine)
+      print("Tables créées avec succès.")
+  ```
+
+---
+
+# 📂 `application/` — **Le point d'entrée API**
+
+> ❗ Ici, on fait le lien entre HTTP (FastAPI) et ton domaine.
+
+- **api/** : routers FastAPI
+  ```python
+  # app/controllers/user_controller.py
+  from app.domain.services.user_service import UserService
+  from app.domain.services.term_service import TermService
+
+  from app.infrastructure.repositories.user_repository_impl import UserRepositoryImpl
+  from app.infrastructure.repositories.term_repository_impl import TermRepositoryImpl
+
+  from sqlmodel import Session
+  from app.domain.models.User import User
+  from app.domain.models.UserResponse import UserResponse
+  from app.domain.models.Term import Term
+
+  from app.infrastructure.db.schemas.user_schema import UserCreateRequest
+
+  from typing import List
+
+  class UserController:
+    def __init__(self, db: Session):
+        self.db = db
+        
+        self.user_repository = UserRepositoryImpl(db)
+        self.user_service = UserService(self.user_repository)
+        
+        self.term_repository = TermRepositoryImpl(db)
+        self.term_service = TermService(self.term_repository)
+    
+    def create_user(self, user: UserCreateRequest) -> User:
+        
+        return self.user_service.create_user(user)
+    
+    def get_user_by_id(self, user_id: int) -> User:
+        
+        return self.user_service.get_user_by_id(user_id)
+    
+    def list_users(self) -> List[User]:
+        
+        return self.user_service.list_users()
+    
+    def add_term_to_user(self, user_id: int, term_id: int) -> User:
+        
+        user = self.user_service.get_user_by_id(user_id)
+        if user:
+            self.term_service.add_term_to_user(user_id, term_id)
+        return user
+
+    def list_terms_for_user(self, user_id: int)-> UserResponse:
+        
+        return self.user_service.list_terms_for_user(user_id)
+  ```
+
+---
+
+# 📄 `main.py` — **L'assemblage**
+
+```python
+# main.py
+app = FastAPI()
+
+app.include_router(user_router, prefix="/api")
+app.include_router(term_router, prefix="/api")
+```
+
+---
+
+# 🧠 Résumé 
+
+- On respecte **l'inversion des dépendances** : le domaine ne dépend jamais de l'infrastructure ✅
+- On sépare les **modèles métiers** (`domain/models`) et les **schemas API** (`infrastructure/db/schemas`) ✅
+- On utilise **SQLModel** pour simplifier l'ORM ✅
+- On garde ton **FastAPI** concentré uniquement sur l'API (pas de logique métier dedans) ✅
+
