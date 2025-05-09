@@ -1,8 +1,10 @@
-from sqlmodel import Session
+from sqlmodel import Session, select
+from sqlalchemy.orm import selectinload
 
 from typing import List
 from app.domain.models.User import User
 from app.infrastructure.db.models.UserDB import UserDB
+
 from app.infrastructure.db.mappers.user_mapper import UserMapper
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
 
@@ -33,9 +35,18 @@ class UserRepositoryImpl(UserServiceProtocol):
         
         return UserMapper.to_domain(user_db)
     
-    # def list_terms_for_user(self, user_id: int)->UserResponse:
-    #     user_db = self.session.query(UserDB).where(UserDB.id == user_id).first()
+    def get_user_with_terms(self, user_id: int) -> User | None:
+        statement = (
+            select(UserDB)
+            .where(UserDB.id == user_id)
+            .options(selectinload(UserDB.terms))  # charge les terms liés
+        )
         
-    #     return UserReponseMapper.to_domain(user_db) 
+        user_db = self.session.exec(statement).one_or_none()
+
+        if user_db is None:
+            return None
+
+        return UserMapper.to_domain(user_db)
 
     

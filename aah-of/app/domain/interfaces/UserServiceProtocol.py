@@ -1,5 +1,5 @@
 from typing import Protocol, runtime_checkable
-from app.domain.models.User import User
+from app.domain.models.User import User, UserTerms
 from typing import List
 
 """
@@ -16,5 +16,8 @@ class UserServiceProtocol(Protocol):
         ...
     
     def list_users(self) -> List[User]:
+        ...
+        
+    def get_user_with_terms(self) -> UserTerms:
         ...
    

@@ -1,5 +1,5 @@
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
-from app.domain.models.User import User
+from app.domain.models.User import User, UserTerms
 
 from typing import List
 
@@ -22,5 +22,9 @@ class UserService:
     def sum_bonus(self, coeff : float = 1.1) -> int:
         # logique métier on augmente de 10% les bonus
         return sum( user.bonus*coeff for user in self.list_users()) 
+    
+    def get_user_with_terms(self, user_id: int) -> UserTerms:
+        
+        return self.user_repository.get_user_with_terms(user_id)
     
         

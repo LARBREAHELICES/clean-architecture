@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.application.controllers.user_controller import UserController
 from app.api.schemas.user_schema import UserCreateRequest
-from app.api.schemas.user_schema import UserResponse
+from app.api.schemas.user_schema import UserResponse, UserTermResponse
 from typing import List
 
 from app.infrastructure.db.database import get_db
@@ -33,6 +33,7 @@ def get_user(user_id: int, user_controller: UserController = Depends(get_user_co
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
-@router.get("/{user_id}/terms", response_model=None)
+@router.get("/{user_id}/terms", response_model=UserTermResponse)
 def get_user_with_terms(user_id: int, user_controller: UserController = Depends(get_user_controller)):
-    pass
+    
+    return user_controller.get_user_with_terms(user_id)

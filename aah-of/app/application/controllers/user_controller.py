@@ -7,7 +7,7 @@ from app.domain.services.term_service import TermService
 from app.infrastructure.repositories.user_repository_impl import UserRepositoryImpl
 from app.infrastructure.repositories.term_repository_impl import TermRepositoryImpl
 
-from app.api.schemas.user_schema import UserCreateRequest, UserResponse
+from app.api.schemas.user_schema import UserCreateRequest, UserResponse, UserTermResponse
 from app.application.usecases.mappers.user_mapper import UserMapper
 
 from typing import List
@@ -48,8 +48,7 @@ class UserController:
         
         return  UserMapper.to_response(user)
 
-    # def user_with_terms(self, user_id: int)-> UserTermResponse:
+    def get_user_with_terms(self, user_id: int) -> UserTermResponse:
+        user = self.user_service.get_user_with_terms(user_id)
         
-    #     users = self.user_service.user_with_terms(user_id)
-        
-    #     return UserMapper.to_response_with_terms(users) 
+        return UserMapper.to_userterms_response(user)

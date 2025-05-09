@@ -17,7 +17,6 @@ down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
-
 def upgrade() -> None:
     """Upgrade schema."""
     op.create_table(
@@ -38,10 +37,13 @@ def upgrade() -> None:
             {'username': 'alice', 'bonus': 100},
             {'username': 'bob', 'bonus': 200},
             {'username': 'charlie', 'bonus': 0},
+            {'username': 'alan', 'bonus': 10},
+            {'username': 'steph', 'bonus': 20},
+            {'username': 'john', 'bonus': 0},
         ]
     )
-
-
+    
+    
 def downgrade() -> None:
     """Downgrade schema."""
     op.drop_table('user')
