@@ -2,14 +2,22 @@
 
 ```
 app/
+├── api/
+│   ├── deps.py   <-- connexion à la base de données
+│   ├── routes/   <-- la couche avec l'extérieur 
+│   ├── schemas/  <-- Normaliser les données entre le monde extérieur (React qui demande un JSON) et la base de données
 ├── application/
-│   └── api/
+│   ├── controllers/
+│   ├── usecases/
 ├── domain/
 │   ├── models/
 │   ├── services/
 │   └── interfaces/
+│   └── services/
 ├── infrastructure/
-│   ├── db/  
+│   ├── db/
+│   │   ├── mappers/
+│   │   └── models/
 │   └── repositories/
 └── main.py
 ```
@@ -218,3 +226,15 @@ app.include_router(term_router, prefix="/api")
 - On utilise **SQLModel** pour simplifier l'ORM ✅
 - On garde ton **FastAPI** concentré uniquement sur l'API (pas de logique métier dedans) ✅
 
+## Création des données 
+
+# 1. Créer une nouvelle migration
+alembic revision --autogenerate -m "création des tables"
+
+# 2. Appliquer la migration à la base de données
+alembic upgrade head
+
+```bash
+alembic downgrade base  # Réinitialise la base à son état initial
+alembic upgrade head   # Applique toutes les migrations
+```

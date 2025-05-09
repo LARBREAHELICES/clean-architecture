@@ -1,0 +1,55 @@
+# app/controllers/user_controller.py
+from sqlmodel import Session
+
+from app.domain.services.user_service import UserService
+from app.domain.services.term_service import TermService
+
+from app.infrastructure.repositories.user_repository_impl import UserRepositoryImpl
+from app.infrastructure.repositories.term_repository_impl import TermRepositoryImpl
+
+from app.api.schemas.user_schema import UserCreateRequest, UserResponse
+from app.application.usecases.mappers.user_mapper import UserMapper
+
+from typing import List
+
+class UserController:
+    def __init__(self, db: Session):
+        self.db = db
+        
+        self.user_repository = UserRepositoryImpl(db)
+        self.user_service = UserService(self.user_repository)
+        
+        self.term_repository = TermRepositoryImpl(db)
+        self.term_service = TermService(self.term_repository)
+    
+    def create_user(self, user: UserCreateRequest) -> UserResponse:
+        user_domain = UserMapper.from_request(user)
+        created_user = self.user_service.create_user(user_domain)
+        
+        return UserMapper.to_response(created_user)
+    
+    def get_user_by_id(self, user_id: int) -> UserResponse:
+        
+        user = self.user_service.get_user_by_id(user_id)
+        
+        return UserMapper.to_response(user) 
+    
+    def list_users(self) -> List[UserResponse]:
+        
+        users = self.user_service.list_users()
+        
+        return UserMapper.to_responses(users)
+    
+    def add_term_to_user(self, user_id: int, term_id: int) -> UserResponse:
+        
+        user = self.user_service.get_user_by_id(user_id)
+        if user:
+            self.term_service.add_term_to_user(user_id, term_id)
+        
+        return  UserMapper.to_response(user)
+
+    # def user_with_terms(self, user_id: int)-> UserTermResponse:
+        
+    #     users = self.user_service.user_with_terms(user_id)
+        
+    #     return UserMapper.to_response_with_terms(users) 

@@ -2,9 +2,9 @@ services:
   web:
     build: .
     container_name: fastapi_app
-    env_file: api/.env
+    env_file: aah-of/.env
     volumes:
-      - ./api:/app
+      - ./aah-of:/app
     ports:
       - "8888:8000"
     depends_on:

@@ -8,11 +8,11 @@ RUN apt-get update && apt-get install -y gcc libpq-dev && rm -rf /var/lib/apt/li
 WORKDIR /app
 
 # Dépendances Python
-COPY api/requirements.txt .
+COPY aah-of/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copier le code
-COPY api .
+COPY aah-of .
 
 # Port exposé
 EXPOSE 8000
