@@ -3,7 +3,8 @@ from app.api.schemas.user_schema import UserCreateRequest, UserResponse, UserTer
 from app.api.schemas.term_schema import TermResponse
 
 # Importation du modèle métier (domaine)
-from app.domain.models.User import User
+from app.domain.models.User import User, UserTerms
+from app.domain.models.Term import Term
 
 from typing import List
 
@@ -29,7 +30,8 @@ class UserMapper:
         ]
     
     @staticmethod
-    def to_userterms_response(user: User) -> UserTermResponse:
+    def to_userterms_response(user: UserTerms) -> UserTermResponse:
+
         # Transforme un User (contenant des termes associés) en un schéma enrichi
         # utilisé pour la sérialisation complète d'un user avec ses terms
         return UserTermResponse(

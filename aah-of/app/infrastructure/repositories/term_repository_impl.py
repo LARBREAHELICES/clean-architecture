@@ -1,6 +1,5 @@
 from app.domain.interfaces.TermServiceProtocol import TermServiceProtocol
-from app.domain.models.Term import Term
-from app.domain.models.User import User
+from app.domain.models.Term import Term, TermUsers
 
 from app.infrastructure.db.models.TermDB import TermDB
 from app.infrastructure.db.models.UserDB import UserDB
@@ -8,8 +7,9 @@ from app.infrastructure.db.models.UserDB import UserDB
 from app.infrastructure.db.mappers.term_mapper import TermMapper
 from app.infrastructure.db.mappers.user_mapper import UserMapper
 
-from typing import List, Tuple
-from sqlmodel import Session
+from typing import List
+from sqlmodel import Session, select
+from sqlalchemy.orm import selectinload
 
 class TermRepositoryImpl(TermServiceProtocol):
     def __init__(self, session: Session):
@@ -35,14 +35,16 @@ class TermRepositoryImpl(TermServiceProtocol):
         
         return [TermMapper.to_domain(term_db) for term_db in terms_db]
 
-    # def add_term_to_user(self, user_id: int, term_id: int) -> Tuple[User, Term]:
-    #     user_db = self.session.get(UserDB, user_id)
-    #     term_db = self.session.get(TermDB, term_id)
+    def get_users_for_term(self, term_id: int) -> list[UserDB] | None:
+        statement = (
+            select(TermDB)
+            .where(TermDB.id == term_id)
+            .options(selectinload(TermDB.users))  # charge les users liés
+        )
         
-    #     if user_db and term_db:
-    #         user_db.terms.append(term_db)
-    #         self.session.commit()
-    #     else:
-    #         raise ValueError("Utilisateur ou terme non trouvé")
+        term_db = self.session.exec(statement).one_or_none()
         
-    #     return (UserMapper.to_domain(user_db), TermMapper.to_domain(term_db))
+        if term_db is None:
+            return None
+
+        return TermMapper.to_domain_termusers(term_db)

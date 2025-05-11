@@ -21,7 +21,7 @@ class UserMapper:
         return UserDB(username=user.username, bonus=user.bonus)
     
     @staticmethod
-    def to_domain(user_db: UserDB) -> UserTerms:
+    def to_domain_userterms(user_db: UserDB) -> UserTerms:
         return UserTerms(
             id=user_db.id,
             username=user_db.username,

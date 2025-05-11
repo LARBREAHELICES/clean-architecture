@@ -2,8 +2,10 @@ from sqlmodel import Session, select
 from sqlalchemy.orm import selectinload
 
 from typing import List
-from app.domain.models.User import User
+from app.domain.models.User import User, UserTerms
+from app.domain.models.Term import Term
 from app.infrastructure.db.models.UserDB import UserDB
+from app.infrastructure.db.models.User_Term_DB import User_Term_DB
 
 from app.infrastructure.db.mappers.user_mapper import UserMapper
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
@@ -35,7 +37,7 @@ class UserRepositoryImpl(UserServiceProtocol):
         
         return UserMapper.to_domain(user_db)
     
-    def get_user_with_terms(self, user_id: int) -> User | None:
+    def get_user_with_terms(self, user_id: int) -> UserTerms | None:
         statement = (
             select(UserDB)
             .where(UserDB.id == user_id)
@@ -47,6 +49,24 @@ class UserRepositoryImpl(UserServiceProtocol):
         if user_db is None:
             return None
 
-        return UserMapper.to_domain(user_db)
-
+        return UserMapper.to_domain_userterms(user_db)
     
+    def assign_user_terms(self, user: User, terms: List[Term]) -> UserTerms:
+        for term in terms:
+            link = User_Term_DB(user_id=user.id, term_id=term.id)
+            self.session.add(link)
+        
+        self.session.commit()
+        
+        return self.get_user_with_terms(user.id)
+    
+    def get_users_by_term(self, term_id: int) -> List[User]:
+        statement = (
+            select(UserDB)
+            .join(User_Term_DB, User_Term_DB.user_id == UserDB.id)
+            .where(User_Term_DB.term_id == term_id)
+            .options(selectinload(UserDB.terms))
+        )
+        results = self.session.exec(statement).all()
+        
+        return [UserMapper.to_domain(user_db) for user_db in results]

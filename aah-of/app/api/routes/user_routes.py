@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.application.controllers.user_controller import UserController
 from app.api.schemas.user_schema import UserCreateRequest
 from app.api.schemas.user_schema import UserResponse, UserTermResponse
-from typing import List
+from typing import List, Annotated
 
 from app.infrastructure.db.database import get_db
 from sqlmodel import Session
@@ -37,3 +37,18 @@ def get_user(user_id: int, user_controller: UserController = Depends(get_user_co
 def get_user_with_terms(user_id: int, user_controller: UserController = Depends(get_user_controller)):
     
     return user_controller.get_user_with_terms(user_id)
+
+@router.post("/user/{user_id}/assign-terms", response_model=UserTermResponse)
+async def assign_terms(
+    user_id: int,
+    term_ids: List[int],
+    controller: UserController = Depends(get_user_controller)
+):
+    return controller.assign_terms_to_user(user_id, term_ids)
+
+@router.get("/term/{term_id}/users", response_model=List[UserResponse])
+def get_users_for_term(
+    term_id: int,
+    controller: UserController = Depends(get_user_controller)
+):
+    return controller.get_users_by_term(term_id)

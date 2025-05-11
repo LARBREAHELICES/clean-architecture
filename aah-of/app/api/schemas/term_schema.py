@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+from typing import List
+
 # Schéma pour la création d'un terme
 class TermCreateRequest(BaseModel):
     name: str
@@ -11,3 +13,4 @@ class TermResponse(BaseModel):
 
     class Config:
         orm_mode = True  # Pour que Pydantic puisse lire les objets SQLAlchemy/SQLModel comme des dicts
+        

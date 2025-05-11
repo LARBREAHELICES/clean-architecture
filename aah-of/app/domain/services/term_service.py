@@ -1,6 +1,8 @@
 # app/domain/services/TermService.py
 from app.domain.interfaces.TermServiceProtocol import TermServiceProtocol
 from app.domain.models.Term import Term
+from app.domain.models.User import User
+
 from typing import List
 
 class TermService:
@@ -20,3 +22,6 @@ class TermService:
     def list_terms(self) -> List[Term]:
         return self.term_repository.list_terms()
 
+    def get_users_for_term(self, term_id:int)-> list[User]:
+        
+          return self.term_repository.get_users_for_term(term_id)

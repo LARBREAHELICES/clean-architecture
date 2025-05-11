@@ -1,5 +1,6 @@
 # app/api/term_routes.py
 from app.api.schemas.term_schema import TermCreateRequest, TermResponse
+from app.api.schemas.user_schema import UserResponse
 from app.application.controllers.term_controller import TermController
 from fastapi import APIRouter, Depends, HTTPException
 from app.infrastructure.db.database import get_db
@@ -29,7 +30,3 @@ def create_term(term: TermCreateRequest, term_controller: TermController = Depen
 def get_term_by_id(term_id: int, term_controller: TermController = Depends(get_term_controller)):
     
     return term_controller.list_term(term_id)
-
-@router.get("/{term_id}/users", response_model=None)
-def get_term_with_users(term_id: int, user_controller: TermController = Depends(get_term_controller)):
-    pass

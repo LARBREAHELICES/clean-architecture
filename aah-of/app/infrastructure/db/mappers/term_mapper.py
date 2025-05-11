@@ -1,5 +1,6 @@
-from app.domain.models.Term import Term
+from app.domain.models.Term import Term, TermUsers
 from app.infrastructure.db.models.TermDB import TermDB
+
 
 class TermMapper:
     
@@ -16,3 +17,4 @@ class TermMapper:
         Convertir un modèle métier Term en un modèle de base de données TermDB
         """
         return TermDB(name=term.name)
+   

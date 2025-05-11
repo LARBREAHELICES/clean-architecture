@@ -17,3 +17,4 @@ class TermMapper:
     def to_responses(terms: List[Term]) -> List[TermResponse]:
         
         return [TermResponse(id=term.id, name=term.name ) for term in terms]
+    
