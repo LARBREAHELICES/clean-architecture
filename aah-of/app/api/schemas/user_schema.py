@@ -7,6 +7,8 @@ class UserBase(BaseModel):
     id: int
     username: str
     bonus: int
+    email: str
+    disabled: bool
 
     class Config:
         orm_mode = True
@@ -15,6 +17,8 @@ class UserBase(BaseModel):
 class UserCreateRequest(BaseModel):
     username: str
     bonus: int
+    password: str  # ajouté ici, obligatoire
+    email: str
 
 # Schéma de base pour la réponse simple
 class UserResponse(UserBase):

@@ -3,7 +3,7 @@ from app.api.schemas.user_schema import UserCreateRequest, UserResponse, UserTer
 from app.api.schemas.term_schema import TermResponse
 
 # Importation du modèle métier (domaine)
-from app.domain.models.User import User, UserTerms
+from app.domain.models.User import User, UserTerms, UserCreate
 from app.domain.models.Term import Term
 
 from typing import List
@@ -12,14 +12,27 @@ from typing import List
 class UserMapper:
 
     @staticmethod
-    def from_request(user_req: UserCreateRequest) -> User:
+    def from_request(user_req: UserCreateRequest) -> UserCreate:
         # Transforme une requête HTTP de création d'utilisateur en un modèle métier User
-        return User(id=None, username=user_req.username, bonus=user_req.bonus)
+        return UserCreate(
+            id=None, 
+            username=user_req.username, 
+            bonus=user_req.bonus,
+            password = user_req.password,
+            email= user_req.email,
+            disabled=False
+            )
 
     @staticmethod
     def to_response(user: User) -> UserResponse:
         # Transforme un User du domaine en un schéma de réponse HTTP simple
-        return UserResponse(id=user.id, username=user.username, bonus=user.bonus)
+        return UserResponse(
+            id=user.id, 
+            username=user.username, 
+            bonus=user.bonus,
+            email= user.email,
+            disabled = user.disabled
+            )
     
     @staticmethod
     def to_userterms_response(user: UserTerms) -> UserTermResponse:
@@ -30,6 +43,8 @@ class UserMapper:
             id=user.id,
             username=user.username,
             bonus=user.bonus,
+            email= user.email,
+            disabled = user.disabled,
             terms=[
                 TermResponse(id=term.id, name=term.name)  # chaque terme est aussi transformé
                 for term in user.terms
