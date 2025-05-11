@@ -1,14 +1,15 @@
 from dataclasses import dataclass
 from typing import List
 
+@dataclass
+class BaseTerm:
+    id: int
+    name: str
 
 @dataclass
-class Term:
-    id: int
-    name: str
-    
+class Term(BaseTerm):
+    pass
+
 @dataclass
-class TermUsers:
-    id: int
-    name: str
-    users : List
+class TermUsers(BaseTerm):
+    users: List["User"]

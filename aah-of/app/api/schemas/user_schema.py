@@ -1,26 +1,25 @@
-# app/interfaces/schemas/user_schema.py
 from pydantic import BaseModel
-
-from app.api.schemas.term_schema import TermResponse
 from typing import List
+from app.api.schemas.term_schema import TermResponse
 
+# Base user info commune à tous les schémas de réponse
+class UserBase(BaseModel):
+    id: int
+    username: str
+    bonus: int
+
+    class Config:
+        orm_mode = True
+
+# Schéma pour la création
 class UserCreateRequest(BaseModel):
     username: str
     bonus: int
 
-class UserResponse(BaseModel):
-    id: int
-    username: str
-    bonus: int
+# Schéma de base pour la réponse simple
+class UserResponse(UserBase):
+    pass
 
-    class Config:
-        orm_mode = True  # pour supporter SQLAlchemy/SQLModel
-
-class UserTermResponse(BaseModel):
-    id: int
-    username: str
-    bonus: int
-    terms : List[TermResponse]
-
-    class Config:
-        orm_mode = True
+# Schéma de réponse avec les termes associés
+class UserTermResponse(UserBase):
+    terms: List[TermResponse]

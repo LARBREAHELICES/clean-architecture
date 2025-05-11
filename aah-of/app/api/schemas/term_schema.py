@@ -1,16 +1,16 @@
 from pydantic import BaseModel
 
-from typing import List
-
-# Schéma pour la création d'un terme
-class TermCreateRequest(BaseModel):
+# Base commune
+class TermBase(BaseModel):
     name: str
 
-# Schéma pour la réponse d'un terme (avec id généré)
-class TermResponse(BaseModel):
+# Pour la création (n’a pas besoin d’`id`)
+class TermCreateRequest(TermBase):
+    pass
+
+# Pour la réponse (hérite de `TermBase` + id)
+class TermResponse(TermBase):
     id: int
-    name: str
 
     class Config:
-        orm_mode = True  # Pour que Pydantic puisse lire les objets SQLAlchemy/SQLModel comme des dicts
-        
+        orm_mode = True
