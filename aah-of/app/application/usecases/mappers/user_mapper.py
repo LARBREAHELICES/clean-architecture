@@ -22,14 +22,6 @@ class UserMapper:
         return UserResponse(id=user.id, username=user.username, bonus=user.bonus)
     
     @staticmethod
-    def to_responses(users: List[User]) -> List[UserResponse]:
-        # Transforme une liste d'utilisateurs du domaine en une liste de réponses HTTP
-        return [
-            UserResponse(id=user.id, username=user.username, bonus=user.bonus)
-            for user in users
-        ]
-    
-    @staticmethod
     def to_userterms_response(user: UserTerms) -> UserTermResponse:
 
         # Transforme un User (contenant des termes associés) en un schéma enrichi

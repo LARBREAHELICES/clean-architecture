@@ -38,7 +38,7 @@ def get_user_with_terms(user_id: int, user_controller: UserController = Depends(
     
     return user_controller.get_user_with_terms(user_id)
 
-@router.post("/user/{user_id}/assign-terms", response_model=UserTermResponse)
+@router.post("/{user_id}/assign-terms", response_model=UserTermResponse)
 async def assign_terms(
     user_id: int,
     term_ids: List[int],

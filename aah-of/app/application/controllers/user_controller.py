@@ -40,8 +40,8 @@ class UserController:
         
         users = self.user_service.list_users()
         
-        return UserMapper.to_responses(users)
-    
+        return [UserMapper.to_response(user) for user in users]
+        
     def add_term_to_user(self, user_id: int, term_id: int) -> UserResponse:
         
         user = self.user_service.get_user_by_id(user_id)
