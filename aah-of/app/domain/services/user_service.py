@@ -20,6 +20,7 @@ class UserService:
         return self.user_repository.get_user_by_id(user_id)
 
     def list_users(self) -> list[User]:
+        
         return self.user_repository.list_users()
     
     def sum_bonus(self, coeff : float = 1.1) -> int:

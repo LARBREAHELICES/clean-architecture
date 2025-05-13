@@ -2,7 +2,7 @@ from app.domain.models.Term import Term
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
 from app.domain.interfaces.TermServiceProtocol import TermServiceProtocol
 
-from app.api.schemas.user_schema import  UserTermResponse
+from app.domain.dtos.user_dto import UserWithTermsDTO
 
 class AssignTermsToUserUseCase:
     def __init__(
@@ -13,7 +13,7 @@ class AssignTermsToUserUseCase:
         self.user_service = user_service
         self.term_service = term_service
 
-    def execute(self, user_id: int, term_ids: list[int]) -> UserTermResponse:
+    def execute(self, user_id: int, term_ids: list[int]) -> UserWithTermsDTO:
         user = self.user_service.get_user_by_id(user_id)
         if not user:
             raise ValueError(f"User {user_id} not found.")

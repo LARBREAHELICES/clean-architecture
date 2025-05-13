@@ -1,29 +1,28 @@
-# app/controllers/term_controller.py
 from app.domain.services.term_service import TermService
-from app.domain.models.Term import Term
-
-# sérialisation API schema FastAPI
-from app.api.schemas.term_schema import TermCreateRequest, TermResponse
-from app.application.usecases.mappers.term_mapper import TermMapper
-
-from typing import List
+from app.domain.dtos.term_dto import TermDTO, TermCreateDTO
+from typing import List, Optional
 
 class TermController:
-    def __init__(self):
-        self.term_service =TermService
-    
-    def list_term(self, term_id: int) -> TermResponse | None:
+    def __init__(self, term_service: TermService):
+        # Injecter le service via le constructeur
+        self.term_service = term_service
+
+    def get_term_by_id(self, term_id: int) -> Optional[TermDTO] | None:
+        # Récupérer un terme par son ID
         term = self.term_service.get_term_by_id(term_id)
         
-        return TermMapper.to_response(term)
-    
-    def list_terms(self) -> List[Term]:
+        if term:
+            return TermDTO.model_validate(term)
+        return None
+
+    def get_all_terms(self) -> List[TermDTO]:
+        # Récupérer la liste des termes
         terms = self.term_service.list_terms()
         
-        return  [TermMapper.to_response(term) for term in terms]
+        return [ TermDTO.model_validate(term) for term in terms ]
 
-    def create_term(self, term: TermCreateRequest) -> TermResponse:
-        term_domain = TermMapper.from_request(term)
-        created_term =  self.term_service.create_term(term_domain)
+    def create_term(self, term: TermCreateDTO) -> TermDTO:
+        # Créer un terme à partir de la requête
+        created_term = self.term_service.create_term(term)
         
-        return TermMapper.to_response(created_term)
+        return TermDTO.from_orm(created_term)
