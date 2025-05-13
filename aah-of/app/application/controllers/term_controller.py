@@ -7,7 +7,7 @@ class TermController:
         # Injecter le service via le constructeur
         self.term_service = term_service
 
-    def get_term_by_id(self, term_id: int) -> Optional[TermDTO] | None:
+    def get_term_by_id(self, term_id: str) -> Optional[TermDTO] | None:
         # Récupérer un terme par son ID
         term = self.term_service.get_term_by_id(term_id)
         

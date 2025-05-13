@@ -24,6 +24,6 @@ def create_term(term: TermCreateDTO, term_controller: TermController = Depends(g
 
 # Lister un terme donné
 @router.get("/{term_id}", response_model=TermDTO)
-def get_term_by_id(term_id: int, term_controller: TermController = Depends(get_term_controller)):
+def get_term_by_id(term_id: str, term_controller: TermController = Depends(get_term_controller)):
     
     return term_controller.get_term_by_id(term_id)

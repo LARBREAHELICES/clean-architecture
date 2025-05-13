@@ -12,7 +12,7 @@ Pas de dépendances avec l'infrastructure
 class TermServiceProtocol(Protocol):
     def create_term(self, user: Term) -> Term:
         ...
-    def get_term_by_id(self, user_id: int) -> Term | None:
+    def get_term_by_id(self, user_id: str) -> Term | None:
         ...
     
     def list_terms(self) -> List[Term]:

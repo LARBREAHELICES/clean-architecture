@@ -23,7 +23,7 @@ class TermUpdateDTO(BaseModel):
 
 # DTO pour la lecture simple (GET /terms, etc.)
 class TermDTO(TermBaseDTO):
-    id: int
+    id: str
 
 # DTO avec utilisateurs associés (GET /terms/{id}/users)
 class TermUsersDTO(TermDTO):

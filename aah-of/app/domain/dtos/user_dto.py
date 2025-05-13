@@ -27,7 +27,7 @@ class UserUpdateDTO(BaseModel):
 
 # Pour la lecture (GET)
 class UserDTO(UserBaseDTO):
-    id: int
+    id: str
 
 # Pour les cas avec relations
 class UserWithTermsDTO(UserDTO):

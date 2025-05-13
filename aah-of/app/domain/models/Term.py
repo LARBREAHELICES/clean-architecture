@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 @dataclass
 class BaseTerm:
-    id: int
+    id: Optional[str] 
     name: str
 
 @dataclass

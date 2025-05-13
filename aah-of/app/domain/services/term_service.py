@@ -16,12 +16,12 @@ class TermService:
         
         return self.term_repository.create_term(term)
 
-    def get_term_by_id(self, term_id: int) -> Term | None:
+    def get_term_by_id(self, term_id: str) -> Term | None:
         return self.term_repository.get_term_by_id(term_id)
 
     def list_terms(self) -> List[Term]:
         return self.term_repository.list_terms()
 
-    def get_users_for_term(self, term_id:int)-> list[User]:
+    def get_users_for_term(self, term_id:str)-> list[User]:
         
           return self.term_repository.get_users_for_term(term_id)

@@ -35,7 +35,7 @@ class UserRepositoryImpl(UserServiceProtocol):
         
         return [User(**UserDTO.from_orm(user_db).__dict__) for user_db in users]
 
-    def get_user_by_id(self, user_id: int) -> User | None:
+    def get_user_by_id(self, user_id: str) -> User | None:
         user_db = self.session.query(UserDB).where(UserDB.id == user_id).first()
         if not user_db:
             return None
@@ -43,7 +43,7 @@ class UserRepositoryImpl(UserServiceProtocol):
         
         return User(**user_dto.__dict__)
 
-    def get_user_with_terms(self, user_id: int) -> UserTerms | None:
+    def get_user_with_terms(self, user_id: str) -> UserTerms | None:
         statement = (
             select(UserDB)
             .where(UserDB.id == user_id)
@@ -71,7 +71,7 @@ class UserRepositoryImpl(UserServiceProtocol):
 
         return self.get_user_with_terms(user.id)
 
-    def get_users_by_term(self, term_id: int) -> List[UserTerms]:
+    def get_users_by_term(self, term_id: str) -> List[UserTerms]:
         statement = (
             select(UserDB)
             .join(User_Term_DB, User_Term_DB.user_id == UserDB.id)

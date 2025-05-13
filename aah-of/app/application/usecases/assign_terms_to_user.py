@@ -13,7 +13,7 @@ class AssignTermsToUserUseCase:
         self.user_service = user_service
         self.term_service = term_service
 
-    def execute(self, user_id: int, term_ids: list[int]) -> UserWithTermsDTO:
+    def execute(self, user_id: str, term_ids: list[str]) -> UserWithTermsDTO:
         user = self.user_service.get_user_by_id(user_id)
         if not user:
             raise ValueError(f"User {user_id} not found.")

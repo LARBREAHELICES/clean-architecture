@@ -15,7 +15,7 @@ class UserService:
         
         return self.user_repository.create_user(user)
 
-    def get_user_by_id(self, user_id: int) -> User:
+    def get_user_by_id(self, user_id: str) -> User:
         
         return self.user_repository.get_user_by_id(user_id)
 
@@ -23,16 +23,16 @@ class UserService:
         
         return self.user_repository.list_users()
     
-    def sum_bonus(self, coeff : float = 1.1) -> int:
+    def sum_bonus(self, coeff : float = 1.1) -> str:
         # logique métier on augmente de 10% les bonus
         return sum( user.bonus*coeff for user in self.list_users()) 
     
-    def get_user_with_terms(self, user_id: int) -> UserTerms:
+    def get_user_with_terms(self, user_id: str) -> UserTerms:
         
         return self.user_repository.get_user_with_terms(user_id)
 
     def assign_user_terms(self, user: User, terms: List[Term]) -> UserTerms:
         return self.user_repository.assign_user_terms(user, terms)
         
-    def get_users_by_term(self, term_id: int) -> List[User]:
+    def get_users_by_term(self, term_id: str) -> List[User]:
         return self.user_repository.get_users_by_term(term_id)

@@ -15,6 +15,7 @@ class TermRepositoryImpl(TermServiceProtocol):
         self.session = session
 
     def create_term(self, term: Term) -> Term:
+            
         term_db = TermDB(**term.dict(exclude_unset=True))
         self.session.add(term_db)
         self.session.commit()
@@ -24,7 +25,7 @@ class TermRepositoryImpl(TermServiceProtocol):
         
         return Term(**term_dto.__dict__)
 
-    def get_term_by_id(self, term_id: int) -> Optional[TermDTO]:
+    def get_term_by_id(self, term_id: str) -> Optional[TermDTO]:
         term_db = self.session.get(TermDB, term_id)
         if not term_db:
             return None
@@ -34,7 +35,7 @@ class TermRepositoryImpl(TermServiceProtocol):
         terms_db = self.session.query(TermDB).all()
         return [TermDTO.model_validate(term) for term in terms_db]
 
-    def get_users_for_term(self, term_id: int) -> Optional[TermUsersDTO]:
+    def get_users_for_term(self, term_id: str) -> Optional[TermUsersDTO]:
         statement = (
             select(TermDB)
             .where(TermDB.id == term_id)

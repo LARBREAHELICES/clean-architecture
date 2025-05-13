@@ -4,7 +4,7 @@ from typing import Optional, List
 
 @dataclass
 class BaseUser:
-    id: Optional[int] 
+    id: Optional[str] 
     username: str
     bonus: int
 

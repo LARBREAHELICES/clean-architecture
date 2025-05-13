@@ -13,7 +13,7 @@ class UserServiceProtocol(Protocol):
     def create_user(self, user: User) -> User:
         ...
     
-    def get_user_by_id(self, user_id: int) -> User | None:
+    def get_user_by_id(self, user_id: str) -> User | None:
         ...
     
     def list_users(self) -> List[User]:
@@ -25,5 +25,5 @@ class UserServiceProtocol(Protocol):
     def assign_user_terms(self,user: User, terms: List[Term] )->UserTerms:
         ...
         
-    def get_users_by_term(self, term_id: int) -> List[User]:
+    def get_users_by_term(self, term_id: str) -> List[User]:
         ...

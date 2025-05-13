@@ -23,7 +23,7 @@ class UserController:
         # en objet Pydantic (UserResponse), que tu peux retourner dans une réponse FastAPI.
         return UserDTO.from_orm(user) 
 
-    def get_user_by_id(self, user_id: int) -> UserDTO:
+    def get_user_by_id(self, user_id: str) -> UserDTO:
         user = self.user_service.get_user_by_id(user_id)
         
         return UserDTO.model_validate(user)
@@ -33,23 +33,23 @@ class UserController:
         
         return [UserDTO.model_validate(user) for user in users]
 
-    def add_term_to_user(self, user_id: int, term_id: int) -> UserDTO:
+    def add_term_to_user(self, user_id: str, term_id: str) -> UserDTO:
         self.term_service.add_term_to_user(user_id, term_id)
         updated_user = self.user_service.get_user_by_id(user_id)
         
         return UserDTO.model_validate(updated_user)
 
-    def get_user_with_terms(self, user_id: int) -> UserWithTermsDTO:
+    def get_user_with_terms(self, user_id: str) -> UserWithTermsDTO:
         user_temrs = self.user_service.get_user_with_terms(user_id)
         
         return UserWithTermsDTO.model_validate(user_temrs)
 
-    def assign_terms_to_user(self, user_id: int, term_ids: List[int]) -> UserWithTermsDTO:
+    def assign_terms_to_user(self, user_id: str, term_ids: List[str]) -> UserWithTermsDTO:
         user_terms = self.assign_terms_uc.execute(user_id, term_ids)
         
         return UserWithTermsDTO.model_validate(user_terms)
 
-    def get_users_by_term(self, term_id: int) -> List[UserDTO]:
+    def get_users_by_term(self, term_id: str) -> List[UserDTO]:
         users = self.user_service.get_users_by_term(term_id)
         
         return [UserDTO.model_validate(user) for user in users]
