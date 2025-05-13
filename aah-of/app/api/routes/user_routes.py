@@ -3,16 +3,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.application.controllers.user_controller import UserController
 from app.api.schemas.user_schema import UserCreateRequest
 from app.api.schemas.user_schema import UserResponse, UserTermResponse
-from typing import List, Annotated
 
-from app.infrastructure.db.database import get_db
-from sqlmodel import Session
+from app.api.deps import get_user_controller
+from typing import List
 
 router = APIRouter()
-
-# Dépendance pour obtenir le contrôleur
-def get_user_controller(db: Session = Depends(get_db)) -> UserController:
-    return UserController(db)
 
 # Créer un utilisateur
 @router.post("/create", response_model=UserResponse)

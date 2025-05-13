@@ -1,28 +1,23 @@
 # app/controllers/user_controller.py
-from sqlmodel import Session
-
 from app.domain.services.user_service import UserService
 from app.domain.services.term_service import TermService
-
-from app.infrastructure.repositories.user_repository_impl import UserRepositoryImpl
-from app.infrastructure.repositories.term_repository_impl import TermRepositoryImpl
+from app.application.usecases.assign_terms_to_user import AssignTermsToUserUseCase
 
 from app.api.schemas.user_schema import UserCreateRequest, UserResponse, UserTermResponse
 from app.application.usecases.mappers.user_mapper import UserMapper
-from app.application.usecases.assign_terms_to_user import AssignTermsToUserUseCase
 
 from typing import List
 
 class UserController:
-    def __init__(self, db: Session):
-        self.db = db
+    def __init__(self,
+                 user_service : UserService, 
+                 term_service : TermService,
+                 assign_terms_uc : AssignTermsToUserUseCase 
+    ):
         
-        self.user_repository = UserRepositoryImpl(db)
-        self.term_repository = TermRepositoryImpl(db)
-        self.term_service = TermService(self.term_repository)
-        self.user_service = UserService(self.user_repository)
-        
-        self.assign_terms_uc = AssignTermsToUserUseCase(self.user_service, self.term_service)
+        self.user_service = user_service
+        self.term_service = term_service
+        self.assign_terms_uc = assign_terms_uc
     
     def create_user(self, user: UserCreateRequest) -> UserResponse:
         user_domain = UserMapper.from_request(user)

@@ -1,17 +1,13 @@
 # app/api/term_routes.py
-from app.api.schemas.term_schema import TermCreateRequest, TermResponse
-from app.api.schemas.user_schema import UserResponse
-from app.application.controllers.term_controller import TermController
 from fastapi import APIRouter, Depends, HTTPException
-from app.infrastructure.db.database import get_db
-from sqlmodel import Session
+
+from app.api.schemas.term_schema import TermCreateRequest, TermResponse
+from app.application.controllers.term_controller import TermController
+from app.api.deps import get_term_controller
+
 from typing import List
 
 router = APIRouter()
-
-# Dépendance pour obtenir le contrôleur
-def get_term_controller(db: Session = Depends(get_db)) -> TermController:
-    return TermController(db)
 
 # Lister tous les termes
 @router.get("/all", response_model=List[TermResponse])
