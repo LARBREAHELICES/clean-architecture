@@ -8,9 +8,14 @@ from app.infrastructure.db.models.User_Term_DB import User_Term_DB
 class UserBase(SQLModel):
     username: str
     bonus: int
+    email: Optional[str] = None
+    is_active: bool = False
 
 class UserCreate(UserBase):
     pass  # utilisé pour la création
+
+class UserAuth(UserBase):
+    password: str 
 
 class UserDB(UserBase, table=True):
     __tablename__ = "user"

@@ -2,8 +2,6 @@ from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
 from app.domain.models.User import User, UserTerms
 from app.domain.models.Term import Term
 
-from app.infrastructure.repositories.user_repository_impl import UserRepositoryImpl
-
 from typing import List
 
 # tu hérites de UserServiceProtocol qui est l'interface

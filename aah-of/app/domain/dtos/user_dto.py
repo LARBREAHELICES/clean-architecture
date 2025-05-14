@@ -7,6 +7,8 @@ from app.domain.dtos.term_dto import TermDTO
 class UserBaseDTO(BaseModel):
     username: str
     bonus: float
+    email: Optional[str] = None
+    is_active: bool = False
 
     class Config:
         orm_mode = True
@@ -29,6 +31,10 @@ class UserUpdateDTO(BaseModel):
 class UserDTO(UserBaseDTO):
     id: str
 
+# Pour l'authentification
+class UserAuthDTO(UserBaseDTO):
+    password: str
+    
 # Pour les cas avec relations
 class UserWithTermsDTO(UserDTO):
     terms: List[TermDTO] = []  # Utilisation de l'annotation différée
