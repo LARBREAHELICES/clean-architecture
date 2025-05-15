@@ -5,21 +5,17 @@ app/
 ├── api/
 │   ├── deps.py   <-- connexion à la base de données
 │   ├── routes/   <-- la couche avec l'extérieur 
-│   ├── schemas/  <-- Normaliser les données entre le monde extérieur (React qui demande un JSON) et la base de données
 ├── application/
 │   ├── controllers/
 │   ├── usecases/
-│   │   ├── mappers/
-│   │   ├── assign_terms_to_user.py
-│   │   └── register.py
+│   │   └── assign_terms_to_user.py
 ├── domain/
 │   ├── models/
 │   ├── services/
+│   ├── dtos/
 │   └── interfaces/
-│   └── services/
 ├── infrastructure/
 │   ├── db/
-│   │   ├── mappers/
 │   │   ├── models/
 │   │   └── database.py
 │   └── repositories/

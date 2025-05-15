@@ -9,14 +9,15 @@ class UserBase(SQLModel):
     username: str
     bonus: int
     email: str
+    is_active: bool
 
-class UserCreate(UserBase):
-    pass  # utilisé pour la création
+class UserCreateDB(UserBase):
+    password : str
 
 class UserDB(UserBase, table=True):
     __tablename__ = "user"
 
     id: Optional[str] =Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
-    
+    password : str
     terms: List["TermDB"] = Relationship(back_populates="users", link_model=User_Term_DB)
     

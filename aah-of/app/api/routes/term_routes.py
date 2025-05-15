@@ -17,7 +17,7 @@ def list_terms(term_controller: TermController = Depends(get_term_controller)):
     return term_controller.get_all_terms()
 
 # Créer un terme
-@router.post("/create", response_model=TermDTO)
+@router.post("/", response_model=TermDTO)
 def create_term(term: TermCreateDTO, term_controller: TermController = Depends(get_term_controller)):
     
     return term_controller.create_term(term)

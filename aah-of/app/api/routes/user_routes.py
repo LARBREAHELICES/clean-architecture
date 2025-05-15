@@ -10,7 +10,7 @@ from typing import List
 router = APIRouter()
 
 # Créer un utilisateur
-@router.post("/create", response_model=UserDTO)
+@router.post("/", response_model=UserDTO)
 async def create_user(user: UserCreateDTO, user_controller: UserController = Depends(get_user_controller)):
     return user_controller.create_user(user)
 

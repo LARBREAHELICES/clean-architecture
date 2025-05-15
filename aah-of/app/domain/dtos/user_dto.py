@@ -10,6 +10,7 @@ class UserBaseDTO(BaseModel):
     username: str
     bonus: float
     email: str
+    is_active: bool
     
     class Config:
         orm_mode = True

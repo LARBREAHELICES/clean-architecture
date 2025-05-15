@@ -10,6 +10,11 @@ from app.application.usecases.assign_terms_to_user import AssignTermsToUserUseCa
 from app.application.controllers.user_controller import UserController
 from app.application.controllers.term_controller import TermController
 
+from app.infrastructure.repositories.user_repository_impl import UserRepositoryImpl
+from app.infrastructure.repositories.security_repositroy_impl import SecurityRepositoryImp
+from app.domain.services.auth_service import UserAuthService
+from app.application.controllers.auth_controller import AuthController
+
 from sqlalchemy.orm import Session
 from fastapi import Depends
 
@@ -45,3 +50,13 @@ def get_user_controller(
 
 def get_term_controller(service=Depends(get_term_service)):
     return TermController(service)
+
+def get_security_service():
+    return SecurityRepositoryImp()
+
+def get_auth_controller(db: Session = Depends(get_db)) -> AuthController:
+    user_repo = UserRepositoryImpl(db)
+    security = SecurityRepositoryImp()
+
+    auth_service = UserAuthService(user_repo, security)
+    return AuthController(auth_service)

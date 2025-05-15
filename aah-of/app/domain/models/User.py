@@ -8,6 +8,7 @@ class BaseUser:
     username: str
     bonus: int
     email: str
+    is_active: bool
 
 @dataclass
 class User(BaseUser):
@@ -20,6 +21,10 @@ class UserCreate(BaseUser):
 @dataclass
 class UserWhitPassword(BaseUser):
     password: str
+    
+@dataclass
+class UserwithoutPassword(BaseUser):
+    pass
 
 @dataclass
 class UserTerms(BaseUser):

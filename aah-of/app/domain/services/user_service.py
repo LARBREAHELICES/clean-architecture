@@ -1,5 +1,5 @@
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
-from app.domain.models.User import User, UserTerms
+from app.domain.models.User import User, UserTerms, UserWhitPassword
 from app.domain.models.Term import Term
 
 from app.infrastructure.repositories.user_repository_impl import UserRepositoryImpl
@@ -22,6 +22,10 @@ class UserService:
     def get_user_by_username(self, username: str) -> User:
         
         return self.user_repository.get_user_by_username(username)
+    
+    def get_user_by_username_with_password(self, username: str) -> UserWhitPassword:
+        
+        return self.user_repository.get_user_by_username_with_password(username)
 
     def list_users(self) -> list[User]:
         

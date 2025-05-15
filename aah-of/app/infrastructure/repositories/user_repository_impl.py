@@ -6,12 +6,12 @@ from typing import List
 from app.infrastructure.db.models.UserDB import UserDB
 from app.infrastructure.db.models.User_Term_DB import User_Term_DB
 
-from app.domain.dtos.user_dto import UserDTO
+from app.domain.dtos.user_dto import UserDTO, UserCreateDTO
 from app.domain.dtos.term_dto import TermDTO
 
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
 
-from app.domain.models.User import User, UserTerms
+from app.domain.models.User import User, UserTerms, UserWhitPassword
 from app.domain.models.Term import Term
 
 class UserRepositoryImpl(UserServiceProtocol):
@@ -48,6 +48,14 @@ class UserRepositoryImpl(UserServiceProtocol):
         user_dto = UserDTO.from_orm(user_db)
         
         return User(**user_dto.__dict__)
+    
+    def get_user_by_username_with_password(self, username: str) -> UserWhitPassword | None:
+        user_db = self.session.query(UserDB).where(UserDB.username == username).first()
+        if not user_db:
+            return None
+        user_dto = UserCreateDTO.from_orm(user_db)
+        
+        return UserWhitPassword(**user_dto.__dict__)
 
     def get_user_with_terms(self, user_id: str) -> UserTerms | None:
         statement = (

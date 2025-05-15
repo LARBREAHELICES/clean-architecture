@@ -6,9 +6,11 @@ from passlib.context import CryptContext
 
 from app.domain.interfaces.SecurityServiceProtocol import SecurityServiceProtocol
 
+from app.config.dev import settings
+
 # Configuration (à externaliser dans un fichier de config ou .env)
-SECRET_KEY = "your-secret-key"
-ALGORITHM = "HS256"
+SECRET_KEY = settings.secret_key
+ALGORITHM = settings.algorithm
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

@@ -2,9 +2,9 @@ from dataclasses import dataclass
 
 from pydantic import BaseModel
 
-class Token(BaseModel):
+class TokenDTO(BaseModel):
     access_token: str
     token_type: str
 
-class TokenData(BaseModel):
+class TokenDTOData(BaseModel):
     username: str | None = None

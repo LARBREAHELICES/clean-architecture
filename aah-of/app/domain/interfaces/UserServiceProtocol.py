@@ -21,6 +21,9 @@ class UserServiceProtocol(Protocol):
         
     def get_user_by_username(self, username: str) -> User:
         ...
+    
+    def get_user_by_username_with_password(self, username: str) -> User:
+        ...
         
     def get_user_with_terms(self) -> UserTerms:
         ...
