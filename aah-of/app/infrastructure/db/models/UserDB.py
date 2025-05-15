@@ -8,6 +8,7 @@ from app.infrastructure.db.models.User_Term_DB import User_Term_DB
 class UserBase(SQLModel):
     username: str
     bonus: int
+    email: str
 
 class UserCreate(UserBase):
     pass  # utilisé pour la création

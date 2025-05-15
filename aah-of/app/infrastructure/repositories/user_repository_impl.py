@@ -5,19 +5,17 @@ from typing import List
 
 from app.infrastructure.db.models.UserDB import UserDB
 from app.infrastructure.db.models.User_Term_DB import User_Term_DB
-from app.infrastructure.db.models.TermDB import TermDB
 
-from app.domain.dtos.user_dto import UserDTO, UserWithTermsDTO
+from app.domain.dtos.user_dto import UserDTO
 from app.domain.dtos.term_dto import TermDTO
 
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
-from app.infrastructure.db.database import get_db
 
 from app.domain.models.User import User, UserTerms
 from app.domain.models.Term import Term
 
 class UserRepositoryImpl(UserServiceProtocol):
-    def __init__(self, session: Session = Depends(get_db)):
+    def __init__(self, session: Session ):
         self.session = session
 
     def create_user(self, user: User) -> User:
@@ -37,6 +35,14 @@ class UserRepositoryImpl(UserServiceProtocol):
 
     def get_user_by_id(self, user_id: str) -> User | None:
         user_db = self.session.query(UserDB).where(UserDB.id == user_id).first()
+        if not user_db:
+            return None
+        user_dto = UserDTO.from_orm(user_db)
+        
+        return User(**user_dto.__dict__)
+
+    def get_user_by_username(self, username: str) -> User | None:
+        user_db = self.session.query(UserDB).where(UserDB.username == username).first()
         if not user_db:
             return None
         user_dto = UserDTO.from_orm(user_db)

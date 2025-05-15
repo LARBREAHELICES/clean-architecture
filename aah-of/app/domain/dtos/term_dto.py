@@ -1,6 +1,8 @@
 from typing import Optional, List
 from pydantic import BaseModel
 
+from uuid import UUID
+
 # Base commune pour création, lecture, update interne
 class TermBaseDTO(BaseModel):
     name: str
@@ -23,7 +25,7 @@ class TermUpdateDTO(BaseModel):
 
 # DTO pour la lecture simple (GET /terms, etc.)
 class TermDTO(TermBaseDTO):
-    id: str
+    id: UUID
 
 # DTO avec utilisateurs associés (GET /terms/{id}/users)
 class TermUsersDTO(TermDTO):
