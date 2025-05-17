@@ -2,7 +2,7 @@ from app.domain.models.Term import Term
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
 from app.domain.interfaces.TermServiceProtocol import TermServiceProtocol
 
-from app.domain.dtos.user_dto import UserWithTermsDTO
+from app.application.dtos.user_dto import UserWithTermsDTO
 
 class AssignTermsToUserUseCase:
     def __init__(

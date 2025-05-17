@@ -6,8 +6,8 @@ from typing import List
 from app.infrastructure.db.models.UserDB import UserDB
 from app.infrastructure.db.models.User_Term_DB import User_Term_DB
 
-from app.domain.dtos.user_dto import UserDTO, UserCreateDTO
-from app.domain.dtos.term_dto import TermDTO
+from app.application.dtos.user_dto import UserDTO, UserCreateDTO
+from app.application.dtos.term_dto import TermDTO
 
 from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
 

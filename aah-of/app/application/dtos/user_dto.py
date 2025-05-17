@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 from uuid import UUID
 
-from app.domain.dtos.term_dto import TermDTO
+from app.application.dtos.term_dto import TermDTO
 
 # Base commune utilisée en interne (app + infra)
 class UserBaseDTO(BaseModel):

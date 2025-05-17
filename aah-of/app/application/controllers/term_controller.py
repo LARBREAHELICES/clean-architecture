@@ -1,5 +1,5 @@
 from app.domain.services.term_service import TermService
-from app.domain.dtos.term_dto import TermDTO, TermCreateDTO
+from app.application.dtos.term_dto import TermDTO, TermCreateDTO
 from typing import List, Optional
 
 class TermController:

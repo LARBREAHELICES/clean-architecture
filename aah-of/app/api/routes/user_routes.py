@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.application.controllers.user_controller import UserController
 
-from app.domain.dtos.user_dto import UserDTO, UserWithTermsDTO, UserCreateDTO
+from app.application.dtos.user_dto import UserDTO, UserWithTermsDTO, UserCreateDTO
 
 from app.api.deps import get_user_controller
 from typing import List

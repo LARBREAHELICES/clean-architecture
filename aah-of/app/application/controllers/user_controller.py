@@ -4,7 +4,7 @@ from app.domain.services.user_service import UserService
 from app.domain.services.term_service import TermService
 from app.application.usecases.assign_terms_to_user import AssignTermsToUserUseCase
 
-from app.domain.dtos.user_dto import UserDTO, UserWithTermsDTO, UserCreateDTO
+from app.application.dtos.user_dto import UserDTO, UserWithTermsDTO, UserCreateDTO
 
 class UserController:
     def __init__(

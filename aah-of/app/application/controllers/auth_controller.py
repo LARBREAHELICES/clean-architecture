@@ -1,9 +1,9 @@
 from fastapi import HTTPException, status
 from app.domain.services.auth_service import UserAuthService
 
-from app.domain.dtos.token_dto import TokenDTO
-from app.domain.dtos.user_dto import UserDTO
-from app.domain.dtos.login_dto import LoginDTO
+from app.application.dtos.token_dto import TokenDTO
+from app.application.dtos.user_dto import UserDTO
+from app.application.dtos.login_dto import LoginDTO
 
 class AuthController:
     def __init__(self, auth_service: UserAuthService):

@@ -1,7 +1,7 @@
 # app/api/term_routes.py
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.domain.dtos.term_dto import TermDTO, TermCreateDTO
+from app.application.dtos.term_dto import TermDTO, TermCreateDTO
 
 from app.application.controllers.term_controller import TermController
 from app.api.deps import get_term_controller
