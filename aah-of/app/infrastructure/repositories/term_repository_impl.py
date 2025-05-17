@@ -3,8 +3,8 @@ from sqlmodel import Session, select
 from sqlalchemy.orm import selectinload
 
 from app.domain.interfaces.TermServiceProtocol import TermServiceProtocol
-from app.domain.dtos.term_dto import TermDTO, TermUsersDTO
-from app.domain.dtos.user_dto import UserDTO
+from app.application.dtos.term_dto import TermDTO, TermUsersDTO
+from app.application.dtos.user_dto import UserDTO
 
 from app.domain.models.Term import Term
 
