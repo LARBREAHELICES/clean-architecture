@@ -31,4 +31,3 @@ class TermDTO(TermBaseDTO):
 class TermUsersDTO(TermDTO):
     
     users: List["UserDTO"] = []  # Utilisation de l'annotation différée
-
