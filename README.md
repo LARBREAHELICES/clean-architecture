@@ -7,12 +7,12 @@ app/
 │   ├── routes/   <-- la couche avec l'extérieur 
 ├── application/
 │   ├── controllers/
+│   ├── dtos/
 │   ├── usecases/
 │   │   └── assign_terms_to_user.py
 ├── domain/
 │   ├── models/
 │   ├── services/
-│   ├── dtos/
 │   └── interfaces/
 ├── infrastructure/
 │   ├── db/
