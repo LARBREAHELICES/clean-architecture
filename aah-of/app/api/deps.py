@@ -7,10 +7,10 @@ from app.domain.services.user_service import UserService
 from app.domain.services.term_service import TermService
 
 from app.application.usecases.assign_terms_to_user import AssignTermsToUserUseCase
+from app.application.usecases.register.create_user import CreateUserUseCase
 from app.application.controllers.user_controller import UserController
 from app.application.controllers.term_controller import TermController
 
-from app.infrastructure.repositories.user_repository_impl import UserRepositoryImpl
 from app.infrastructure.repositories.security_repositroy_impl import SecurityRepositoryImp
 from app.domain.services.auth_service import UserAuthService
 from app.application.controllers.auth_controller import AuthController
@@ -37,22 +37,32 @@ def get_register_user_use_case(
         user_service=user_service,
         term_service=term_service)
 
+def get_security_service():
+    return SecurityRepositoryImp()
+
+def get_register_user_use_case(
+        user_service: UserService = Depends(get_user_service),
+        security  = Depends(get_security_service)
+):
+    return CreateUserUseCase(user_service=user_service, security=security)
+
 def get_user_controller(
     user_service: UserService = Depends(get_user_service),
     term_service: TermService = Depends(get_term_service),
     assign_terms_uc: AssignTermsToUserUseCase = Depends(get_register_user_use_case),
+    create_user_uc : CreateUserUseCase = Depends(get_register_user_use_case)
 ) -> UserController:
     return UserController(
         user_service=user_service,
         term_service=term_service,
-        assign_terms_uc=assign_terms_uc
+        assign_terms_uc=assign_terms_uc,
+        create_user_uc = create_user_uc
     )
 
 def get_term_controller(service=Depends(get_term_service)):
     return TermController(service)
 
-def get_security_service():
-    return SecurityRepositoryImp()
+
 
 def get_auth_controller(db: Session = Depends(get_db)) -> AuthController:
     user_repo = UserRepositoryImpl(db)

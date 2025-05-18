@@ -3,6 +3,7 @@ from typing import List
 from app.domain.services.user_service import UserService
 from app.domain.services.term_service import TermService
 from app.application.usecases.assign_terms_to_user import AssignTermsToUserUseCase
+from app.application.usecases.register.create_user import CreateUserUseCase
 
 from app.application.dtos.user_dto import UserDTO, UserWithTermsDTO, UserCreateDTO
 
@@ -11,14 +12,16 @@ class UserController:
         self,
         user_service: UserService,
         term_service: TermService,
-        assign_terms_uc: AssignTermsToUserUseCase
+        assign_terms_uc: AssignTermsToUserUseCase,
+        create_user_uc: CreateUserUseCase
     ):
         self.user_service = user_service
         self.term_service = term_service
-        self.assign_terms_uc = assign_terms_uc
+        self.assign_terms_uc = assign_terms_uc,
+        self.create_user_uc = create_user_uc
 
     def create_user(self, user: UserCreateDTO) -> UserDTO:
-        user = self.user_service.create_user(user)
+        user = self.create_user_uc.execute(user)
         # Tu transformes un objet SQLAlchemy (UserDB) ici userDB
         # en objet Pydantic (UserResponse), que tu peux retourner dans une réponse FastAPI.
         return UserDTO.from_orm(user) 
