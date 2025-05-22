@@ -1,7 +1,15 @@
+# starter 
+
+```
+docker compose down --volumes --remove-orphans && docker system prune -af --volumes
+```
+
+https://ui.shadcn.com/docs/installation/vite
+
 # 🏛 Structure générale
 
 ```
-app/
+apps/
 ├── api/
 │   ├── deps.py   <-- connexion à la base de données
 │   ├── routes/   <-- la couche avec l'extérieur 
@@ -65,6 +73,10 @@ alembic downgrade base
 alembic revision -m "add user_term associations"
 
 # lancer les migrations
+alembic upgrade head
+
+# initialisation
+alembic downgrade base
 alembic upgrade head
 ```
 

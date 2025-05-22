@@ -1,2 +1,17 @@
 secrets/
 __pycache__/
+node_modules/
+dist/
+coverage/
+*.egg-info/
+*.egg
+*.log
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.sqlite
+*.db-journal
+*.DS_Store
+

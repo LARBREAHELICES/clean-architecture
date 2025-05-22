@@ -1,14 +1,18 @@
 services:
   web:
-    build: .
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile.back
     container_name: fastapi_app
-    env_file: aah-of/.env
+    env_file: .env
     volumes:
-      - ./aah-of:/app
+      - ./apps/api:/app
     ports:
       - "8888:8000"
     depends_on:
       - db
+    networks:
+      - app_network
 
   db:
     image: postgres:latest
@@ -22,6 +26,21 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - app_network
+
+  front:
+    build:
+      context: ./apps/front
+      dockerfile: Dockerfile.front
+    container_name: app_front
+    volumes:
+      - ./apps/front:/app
+      - /app/node_modules # évite d'écraser les modules
+    ports:
+      - "5175:5173"  # accès sur localhost:5175
+    networks:
+      - app_network
 
   adminer:
     image: adminer
@@ -29,6 +48,13 @@ services:
     restart: always
     ports:
       - "8087:8080"
+    networks:
+      - app_network
 
 volumes:
   postgres_data:
+
+# Réseaux pour la communication entre services
+networks:
+  app_network:
+    driver: bridge
