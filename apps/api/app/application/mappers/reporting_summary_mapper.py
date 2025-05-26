@@ -23,6 +23,7 @@ def dto_to_domain(dto: ReportingSummaryDTO) -> ReportingSummary:
         teacher_name=dto.teacher_name,
         billed_at=dto.billed_at,
         created_at=dto.created_at,
+        is_certifying=dto.is_certifying,
     )
 
 def domain_to_dto(domain: ReportingSummary) -> ReportingSummaryDTO:
@@ -37,6 +38,7 @@ def domain_to_dto(domain: ReportingSummary) -> ReportingSummaryDTO:
         teacher_name=domain.teacher_name,
         billed_at=domain.billed_at,
         created_at=domain.created_at,
+        is_certifying=domain.is_certifying,
     )
 
 def to_grouped_dto_list(rows: List[Row]) -> List[ReportingSummaryGroupedDTO]:
@@ -83,5 +85,6 @@ def to_totals_by_certification(rows) -> TotalsByCertificationDTO:
 
     return TotalsByCertificationDTO(
         certifying=certifying,
-        not_certifying=not_certifying
+        not_certifying=not_certifying,
+        number_of_teachers=rows.number_of_teachers
     )

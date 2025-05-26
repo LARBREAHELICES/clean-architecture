@@ -9,11 +9,10 @@ from app.domain.interfaces.ReportingSummaryProtocol import ReportingSummaryProto
 from app.infrastructure.db.models.ReportingSummaryDB import ReportingSummaryDB
 
 from app.application.dtos.reporting_summary_dto import ( 
-    ReportingSummaryDTO, ReportingSummaryGroupedDTO, ReportingSummaryFilterDTO, 
+    ReportingSummaryDTO, ReportingSummaryFilterDTO, 
     TotalsByCertificationDTO,
     CertificationTotalsDTO
 )
-
 
 class ReportingSummaryRepositoryImpl(ReportingSummaryProtocol):
     def __init__(self, session: Session ):
@@ -87,11 +86,24 @@ class ReportingSummaryRepositoryImpl(ReportingSummaryProtocol):
         certifying = [item for item in grouped if item.is_certifying]
         not_certifying = [item for item in grouped if not item.is_certifying]
 
+        # Comptage des enseignants distincts
+        
+        statement = (
+                select(
+                    func.count(func.distinct(
+                        func.lower(func.trim(func.replace(ReportingSummaryDB.teacher_name, '  ', ' ')))
+                    ))
+                )
+                .where(ReportingSummaryDB.teacher_name.is_not(None))
+            )
+        number_of_teachers = self.session.exec(statement).one() or 0
+        
         certifying_totals = CertificationTotalsDTO(
             total_hours=sum(item.total_hours for item in certifying),
             total_students=sum(item.total_students for item in certifying),
             group_count=len(certifying)
         )
+
         not_certifying_totals = CertificationTotalsDTO(
             total_hours=sum(item.total_hours for item in not_certifying),
             total_students=sum(item.total_students for item in not_certifying),
@@ -100,8 +112,21 @@ class ReportingSummaryRepositoryImpl(ReportingSummaryProtocol):
 
         return TotalsByCertificationDTO(
             certifying=certifying_totals,
-            not_certifying=not_certifying_totals
+            not_certifying=not_certifying_totals,
+            number_of_teachers=int(number_of_teachers),
         )
+        
+    def get_last_invoice_name(self) -> int:
+        """
+        Get the last invoice name.
+        """
+        statement = select(func.min(ReportingSummaryDB.invoice_name))
+        last_invoice = self.session.exec(statement).one()
+        
+        if last_invoice is None:
+            return 0
+        
+        return int(last_invoice) 
         
     def get_filtered_summaries(self, filters: ReportingSummaryFilterDTO) -> List[ReportingSummary]:
         statement = select(ReportingSummaryDB)
@@ -137,3 +162,8 @@ class ReportingSummaryRepositoryImpl(ReportingSummaryProtocol):
             return []
         
         return [ReportingSummary(**ReportingSummaryDTO.from_orm(s).__dict__) for s in summaries]
+    
+
+    def normalize_teacher_name(name: str) -> str:
+            # Supprime les espaces inutiles et met en minuscule
+            return " ".join(name.strip().split()).lower()

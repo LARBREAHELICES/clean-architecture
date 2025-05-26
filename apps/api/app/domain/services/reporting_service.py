@@ -37,5 +37,9 @@ class ReportingSummaryService:
         Get the total number of students and hours by certification.
         """
         return self.repository.get_totals_by_certification()
-    
    
+    def get_last_invoice_name(self) -> datetime | None:
+        """
+        Get the last invoice date.
+        """
+        return self.repository.get_last_invoice_name()

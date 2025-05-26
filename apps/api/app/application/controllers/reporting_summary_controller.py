@@ -42,3 +42,9 @@ class ReportingSummaryController:
         if not reports:
             return []
         return to_totals_by_certification(reports)
+    
+    def get_last_invoice_name(self) -> str:
+        last_invoice_name = self.reporting_service.get_last_invoice_name()
+        if not last_invoice_name:
+            return ""
+        return last_invoice_name

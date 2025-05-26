@@ -72,7 +72,7 @@ export default function StatisticsPage() {
                 <TableCell className="text-right">{item.total_hours}</TableCell>
                 <TableCell className="text-right">{item.total_students}</TableCell>
                 <TableCell className="text-right">{item.summary_count}</TableCell>
-                <TableCell className="text-right">#</TableCell>
+                <TableCell className="text-right">{item.is_certifying ? "yes" : "no"}</TableCell>
               </TableRow>
             ))}
           </TableBody>

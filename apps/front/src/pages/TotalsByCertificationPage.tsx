@@ -34,6 +34,12 @@ export default function TotalsByCertificationPage() {
 
   return (
     <div className="max-w-4xl mx-auto mt-10 flex justify-center gap-8">
+      <Card className="w-80">
+        <CardContent>
+          <h2 className="text-xl font-semibold mb-4">Total Teachers</h2>
+          <p><strong>Number teachers :</strong> {total.number_of_teachers}</p> 
+        </CardContent>
+      </Card>     
       {renderCard("Certifying", total.certifying)}
       {renderCard("Not Certifying", total.not_certifying)}
     </div>

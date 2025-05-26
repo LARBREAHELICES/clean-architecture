@@ -48,3 +48,10 @@ def get_totals_by_certification(
     ):
     
     return controller.total()
+
+@router.get("/last-invoice-name", response_model=int)
+def get_last_invoice_name(
+    controller : ReportingSummaryController = Depends(get_reporting_summary_controller)
+    ):
+    
+    return controller.get_last_invoice_name()

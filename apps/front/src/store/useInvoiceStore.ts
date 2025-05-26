@@ -39,7 +39,7 @@ const emptyInvoice: Invoice = {
   nb_students: 1,
   billed_at: "",
   teacher_name: "",
-  is_certifying: null,
+  is_certifying: true,
 };
 
 export const useInvoiceStore = create<InvoiceStore>()(
@@ -48,8 +48,9 @@ export const useInvoiceStore = create<InvoiceStore>()(
       data: [],
       current: emptyInvoice,
       currentPage: 1,
-      itemsPerPage: 10,
+      itemsPerPage: 20,
       loading: false,
+      lastInvoice: "",
 
       setPage: (page) => set({ currentPage: page }),
 
@@ -104,6 +105,19 @@ export const useInvoiceStore = create<InvoiceStore>()(
           set({ loading: false });
         }
       },
+
+      fetchLastInvoice: async () => {  
+        try {
+          const response = await fetch(`${apiUrl}/reporting-summary/last-invoice-name`);
+          if (!response.ok) {
+            throw new Error(`Erreur API: ${response.statusText}`);
+          }
+          const lastInvoice = await response.json();
+          set({ lastInvoice: lastInvoice });
+        } catch (error) {
+          console.error("Erreur lors du chargement de la dernière facture :", error);
+        }
+      }
     })
   )
 );

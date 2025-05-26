@@ -11,6 +11,7 @@ type CertificationTotal = {
 type TotalsByCertification = {
   certifying: CertificationTotal;
   not_certifying: CertificationTotal;
+  number_of_teachers: number;
 }
 
 type TotalsState = {
