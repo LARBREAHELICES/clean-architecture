@@ -5,9 +5,12 @@ from app.domain.models.Term import Term
 from app.application.dtos.term_dto import TermDTO
 
 def orm_to_domain_term(term_db: TermDB) -> Term:
-    
-    return Term(**term_db.model_dump())
 
-def domain_to_dto_term(term: Term) -> TermDTO:
+    if not term_db.id:
+        return Term(id=None, name=term_db.name)
     
-    return TermDTO.model_validate(term)
+    return Term(id=term_db.id, name=term_db.name)
+
+def domain_to_term_dto(term: Term) -> TermDTO:
+    
+    return TermDTO(id=term.id, name=term.name)

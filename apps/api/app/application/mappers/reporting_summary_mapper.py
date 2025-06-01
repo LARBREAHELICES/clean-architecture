@@ -41,7 +41,7 @@ def domain_to_dto(domain: ReportingSummary) -> ReportingSummaryDTO:
         is_certifying=domain.is_certifying,
     )
 
-def to_grouped_dto_list(rows: List[Row]) -> List[ReportingSummaryGroupedDTO]:
+def to_grouped_dto_list(rows: List[ReportingSummaryDTO]) -> List[ReportingSummaryGroupedDTO]:
     return [
         ReportingSummaryGroupedDTO(
             school_name=row.school_name,

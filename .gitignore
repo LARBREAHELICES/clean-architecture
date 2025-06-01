@@ -16,3 +16,5 @@ coverage/
 *.DS_Store
 
 .vite/
+
+apps/front/.pnpm-store

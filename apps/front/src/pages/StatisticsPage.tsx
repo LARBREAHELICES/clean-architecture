@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useGroupedInvoices } from "@/store/useGroupedInvoices";
+import { useGroupedInvoices } from "@/stores/useGroupedInvoices";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";  // <-- import Button

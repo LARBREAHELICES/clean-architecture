@@ -1,21 +1,19 @@
 # app/application/mappers/user_mapper.py
 
-from typing import List, Optional
+
 from pydantic import BaseModel
-from uuid import UUID
 
 from app.domain.models.User import User, UserTerms, UserWithPassword
 from app.infrastructure.db.models.UserDB import UserDB
 from app.application.mappers.term_mapper import orm_to_domain_term
-from app.application.dtos.user_dto import UserDTO, UserCreateDTO, UserWithTermsDTO
-from app.application.dtos.term_dto import TermDTO
-from app.application.mappers.term_mapper import domain_to_dto_term
+from app.application.dtos.user_dto import UserDTO, UserWithTermsDTO
+from app.application.mappers.term_mapper import domain_to_term_dto
 
 def dto_to_domain_user(dto: UserDTO) -> User:
     
-    return User(**dto.dict())
+    return User(**dto.__dict__)
 
-def domain_to_dto_user(user: User) -> UserDTO | None:
+def domain_to_dto_user_dto(user: User) -> UserDTO | None:
     if not user:
         return None
     
@@ -42,16 +40,10 @@ def orm_to_domain_user_terms(user_db: UserDB) -> UserTerms:
         terms=[orm_to_domain_term(term) for term in user_db.terms]
     )
 
-def orm_to_domain_user_with_password(user_db: UserDB) -> UserWithPassword:
-    # On crée un DTO de création (UserCreateDTO) depuis l'ORM
-    user_create_dto = UserCreateDTO.from_orm(user_db)
-    # Puis on instancie le modèle domaine avec les données du DTO
-    return UserWithPassword(**user_create_dto.dict())
-
 def domain_to_dto_user_with_terms(user: UserTerms) -> UserWithTermsDTO | None:
     if not user:
         return None
-    terms_dto = [domain_to_dto_term(term) for term in (user.terms or [])]
+    terms_dto = [domain_to_term_dto(term) for term in (user.terms or [])]
     return UserWithTermsDTO(
         id=user.id,
         username=user.username,

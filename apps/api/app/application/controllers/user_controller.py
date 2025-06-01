@@ -6,7 +6,7 @@ from app.application.usecases.assign_terms_to_user import AssignTermsToUserUseCa
 from app.application.usecases.register.create_user import CreateUserUseCase
 
 from app.application.mappers.user_mapper import (
-    domain_to_dto_user,
+    domain_to_dto_user_dto,
     domain_to_dto_user_with_terms,
 )
 from app.application.dtos.user_dto import UserDTO, UserCreateDTO, UserWithTermsDTO
@@ -24,29 +24,32 @@ class UserController:
         self.assign_terms_uc = assign_terms_uc
         self.create_user_uc = create_user_uc
 
-    def create_user(self, user_create_dto: UserCreateDTO) -> UserDTO:
+    def create_user(self, user_create_dto: UserCreateDTO) -> UserDTO | None:
         user_domain = self.create_user_uc.execute(user_create_dto)
         
-        return domain_to_dto_user(user_domain)
+        if not user_domain:
+            return None
+        
+        return domain_to_dto_user_dto(user_domain)
 
-    def get_user_by_id(self, user_id: str) -> UserDTO:
+    def get_user_by_id(self, user_id: str) -> UserDTO | None:
         user_domain = self.user_service.get_user_by_id(user_id)
         
-        return domain_to_dto_user(user_domain)
+        if not user_domain:
+            return None
+        
+        return domain_to_dto_user_dto(user_domain)
 
     def list_users(self) -> List[UserDTO]:
         users_domain = self.user_service.list_users()
         
-        return [domain_to_dto_user(user) for user in users_domain]
+        return [domain_to_dto_user_dto(user) for user in users_domain]
 
-    def add_term_to_user(self, user_id: str, term_id: str) -> UserDTO:
-        self.term_service.add_term_to_user(user_id, term_id)
-        updated_user_domain = self.user_service.get_user_by_id(user_id)
-        
-        return domain_to_dto_user(updated_user_domain)
-
-    def get_user_with_terms(self, user_id: str) -> UserWithTermsDTO:
+    def get_user_with_terms(self, user_id: str) -> UserWithTermsDTO | None:
         user_terms_domain = self.user_service.get_user_with_terms(user_id)
+        
+        if not user_terms_domain:
+            return None
         
         return domain_to_dto_user_with_terms(user_terms_domain)
 
@@ -58,4 +61,4 @@ class UserController:
     def get_users_by_term(self, term_id: str) -> List[UserDTO]:
         users_domain = self.user_service.get_users_by_term(term_id)
         
-        return [domain_to_dto_user(user) for user in users_domain]
+        return [domain_to_dto_user_dto(user) for user in users_domain]

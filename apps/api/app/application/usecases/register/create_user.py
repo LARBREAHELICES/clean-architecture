@@ -2,7 +2,7 @@ from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
 from app.domain.interfaces.SecurityServiceProtocol import SecurityServiceProtocol
 from app.application.dtos.user_dto import UserDTO, UserCreateDTO
 
-from app.application.mappers.user_mapper import domain_to_dto_user
+from app.application.mappers.user_mapper import domain_to_dto_user_dto
 
 class CreateUserUseCase:
     def __init__(
@@ -18,9 +18,9 @@ class CreateUserUseCase:
         hashed_password = self.security.hash_password(user.password)
         
         # 2. Création de l'utilisateur (enrichi avec le mot de passe hashé)
-        user_with_hashed_password = user.model_copy(update={"password": hashed_password})
-        created_user = self.user_service.create_user(user_with_hashed_password)
+        user.password = hashed_password
+        created_user = self.user_service.create_user(user)
 
         # 3. Retourne un DTO pour la réponse
         
-        return domain_to_dto_user(created_user)
+        return domain_to_dto_user_dto(created_user)

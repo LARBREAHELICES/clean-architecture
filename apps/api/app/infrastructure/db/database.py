@@ -1,6 +1,8 @@
 # app/infrastructure/db/database.py
 from sqlmodel import Session, create_engine, SQLModel
 
+from typing import Generator, Any
+
 from app.config.dev import settings
 
 # ⚡ On importe les modèles d'infrastructure !
@@ -17,7 +19,8 @@ engine = create_engine(settings.database_url)
 def SessionLocal() -> Session:
     return Session(bind=engine)
 
-def get_db():
+def get_db() -> Generator[Session, None, None]:
+    """Générateur pour obtenir une session de base de données."""
     db = SessionLocal()
     try:
         yield db

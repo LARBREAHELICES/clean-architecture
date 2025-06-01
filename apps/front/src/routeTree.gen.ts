@@ -12,15 +12,26 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as StatisticImport } from './routes/statistic'
+import { Route as LoginImport } from './routes/login'
 import { Route as InvoicesImport } from './routes/invoices'
 import { Route as BilanImport } from './routes/bilan'
+import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
+import { Route as AuthenticatedProfilImport } from './routes/_authenticated/profil'
+import { Route as AuthenticatedDashboardImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedAgendaImport } from './routes/_authenticated/agenda'
 
 // Create/Update Routes
 
 const StatisticRoute = StatisticImport.update({
   id: '/statistic',
   path: '/statistic',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -36,10 +47,33 @@ const BilanRoute = BilanImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthenticatedRoute = AuthenticatedImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AuthenticatedProfilRoute = AuthenticatedProfilImport.update({
+  id: '/profil',
+  path: '/profil',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedDashboardRoute = AuthenticatedDashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedAgendaRoute = AuthenticatedAgendaImport.update({
+  id: '/agenda',
+  path: '/agenda',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -51,6 +85,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedImport
       parentRoute: typeof rootRoute
     }
     '/bilan': {
@@ -67,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InvoicesImport
       parentRoute: typeof rootRoute
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
     '/statistic': {
       id: '/statistic'
       path: '/statistic'
@@ -74,53 +122,137 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StatisticImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated/agenda': {
+      id: '/_authenticated/agenda'
+      path: '/agenda'
+      fullPath: '/agenda'
+      preLoaderRoute: typeof AuthenticatedAgendaImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/profil': {
+      id: '/_authenticated/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof AuthenticatedProfilImport
+      parentRoute: typeof AuthenticatedImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedAgendaRoute: typeof AuthenticatedAgendaRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAgendaRoute: AuthenticatedAgendaRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedProfilRoute: AuthenticatedProfilRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '': typeof AuthenticatedRouteWithChildren
   '/bilan': typeof BilanRoute
   '/invoices': typeof InvoicesRoute
+  '/login': typeof LoginRoute
   '/statistic': typeof StatisticRoute
+  '/agenda': typeof AuthenticatedAgendaRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/profil': typeof AuthenticatedProfilRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '': typeof AuthenticatedRouteWithChildren
   '/bilan': typeof BilanRoute
   '/invoices': typeof InvoicesRoute
+  '/login': typeof LoginRoute
   '/statistic': typeof StatisticRoute
+  '/agenda': typeof AuthenticatedAgendaRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/profil': typeof AuthenticatedProfilRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/bilan': typeof BilanRoute
   '/invoices': typeof InvoicesRoute
+  '/login': typeof LoginRoute
   '/statistic': typeof StatisticRoute
+  '/_authenticated/agenda': typeof AuthenticatedAgendaRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/profil': typeof AuthenticatedProfilRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bilan' | '/invoices' | '/statistic'
+  fullPaths:
+    | '/'
+    | ''
+    | '/bilan'
+    | '/invoices'
+    | '/login'
+    | '/statistic'
+    | '/agenda'
+    | '/dashboard'
+    | '/profil'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bilan' | '/invoices' | '/statistic'
-  id: '__root__' | '/' | '/bilan' | '/invoices' | '/statistic'
+  to:
+    | '/'
+    | ''
+    | '/bilan'
+    | '/invoices'
+    | '/login'
+    | '/statistic'
+    | '/agenda'
+    | '/dashboard'
+    | '/profil'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/bilan'
+    | '/invoices'
+    | '/login'
+    | '/statistic'
+    | '/_authenticated/agenda'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/profil'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   BilanRoute: typeof BilanRoute
   InvoicesRoute: typeof InvoicesRoute
+  LoginRoute: typeof LoginRoute
   StatisticRoute: typeof StatisticRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   BilanRoute: BilanRoute,
   InvoicesRoute: InvoicesRoute,
+  LoginRoute: LoginRoute,
   StatisticRoute: StatisticRoute,
 }
 
@@ -135,13 +267,23 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_authenticated",
         "/bilan",
         "/invoices",
+        "/login",
         "/statistic"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/_authenticated": {
+      "filePath": "_authenticated.tsx",
+      "children": [
+        "/_authenticated/agenda",
+        "/_authenticated/dashboard",
+        "/_authenticated/profil"
+      ]
     },
     "/bilan": {
       "filePath": "bilan.tsx"
@@ -149,8 +291,23 @@ export const routeTree = rootRoute
     "/invoices": {
       "filePath": "invoices.tsx"
     },
+    "/login": {
+      "filePath": "login.tsx"
+    },
     "/statistic": {
       "filePath": "statistic.tsx"
+    },
+    "/_authenticated/agenda": {
+      "filePath": "_authenticated/agenda.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/dashboard": {
+      "filePath": "_authenticated/dashboard.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/profil": {
+      "filePath": "_authenticated/profil.tsx",
+      "parent": "/_authenticated"
     }
   }
 }

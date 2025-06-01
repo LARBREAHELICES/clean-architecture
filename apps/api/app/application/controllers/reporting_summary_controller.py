@@ -26,8 +26,12 @@ class ReportingSummaryController:
         
         return to_grouped_dto_list(reports)
 
-    def create(self, reporting: ReportingSummaryCreateDTO) -> ReportingSummaryDTO:
+    def create(self, reporting: ReportingSummaryCreateDTO) -> ReportingSummaryDTO | None:
         created = self.reporting_service.create_summary(reporting)
+        
+        if not created:
+            return None
+        # Convert the created domain object to DTO
         
         return domain_to_dto(created)
 
@@ -37,10 +41,10 @@ class ReportingSummaryController:
             return []
         return [domain_to_dto(report) for report in reports]
 
-    def total(self) -> TotalsByCertificationDTO:
+    def total(self) -> TotalsByCertificationDTO | None:
         reports = self.reporting_service.get_totals_by_certification()
         if not reports:
-            return []
+            return None
         return to_totals_by_certification(reports)
     
     def get_last_invoice_name(self) -> str:

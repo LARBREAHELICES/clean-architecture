@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { useInvoiceStore } from "@/store/useInvoiceStore"
+import { useInvoiceStore } from "@/stores/useInvoiceStore"
 import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"

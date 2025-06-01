@@ -1,10 +1,9 @@
 from dataclasses import dataclass
 from typing import List, Optional
-from uuid import UUID
 
 @dataclass
 class BaseTerm:
-    id: Optional[UUID] 
+    id: Optional[str] 
     name: str
 
 @dataclass

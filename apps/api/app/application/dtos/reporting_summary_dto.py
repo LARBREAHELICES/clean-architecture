@@ -69,7 +69,7 @@ class ReportingSummaryGroupedDTO(BaseModel):
 
 
 # Pour la lecture (GET)
-class ReportingSummaryDTO(ReportingSummaryBaseDTO):
+class ReportingSummaryDTO(ReportingSummaryGroupedDTO):
     id: UUID
     created_at: datetime
 

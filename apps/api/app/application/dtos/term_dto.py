@@ -7,9 +7,9 @@ from uuid import UUID
 class TermBaseDTO(BaseModel):
     name: str
 
-    class Config:
-        orm_mode = True
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 # DTO pour la création (POST)
 class TermCreateDTO(TermBaseDTO):
@@ -19,9 +19,9 @@ class TermCreateDTO(TermBaseDTO):
 class TermUpdateDTO(BaseModel):
     name: Optional[str] = None
 
-    class Config:
-        orm_mode = True
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 # DTO pour la lecture simple (GET /terms, etc.)
 class TermDTO(TermBaseDTO):

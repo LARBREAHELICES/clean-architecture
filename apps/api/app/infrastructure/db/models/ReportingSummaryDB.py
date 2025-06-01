@@ -1,7 +1,6 @@
 # app/infrastructure/db/models/reporting_summary_db.py
 
 import uuid
-from uuid import UUID
 from typing import Optional
 from datetime import datetime, timezone
 
@@ -20,8 +19,8 @@ class ReportingSummaryBase(SQLModel):
 class ReportingSummaryCreateDB(ReportingSummaryBase):
     pass
 
-class ReportingSummaryDB(ReportingSummaryBase, table=True):
+class ReportingSummaryDB(ReportingSummaryBase, table=True): # type: ignore[misc]
     __tablename__ = "reporting_summary"
+    id: Optional[uuid.UUID] =Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True) # type: ignore[misc]
 
-    id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
-    created_at: datetime = Field(default_factory=datetime.now)
+    created_at: datetime = Field(default_factory=datetime.now) # type: ignore[misc]

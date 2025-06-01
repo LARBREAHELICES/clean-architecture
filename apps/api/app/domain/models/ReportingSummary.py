@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
 from datetime import datetime, timezone
-from uuid import UUID
 
 @dataclass
 class ReportingSummaryBase:
@@ -22,7 +21,7 @@ class ReportingSummaryCreate(ReportingSummaryBase):
 
 @dataclass
 class ReportingSummary(ReportingSummaryBase):
-    id: Optional[UUID] = None
+    id: Optional[str] = None
 
 @dataclass
 class ReportingSummaryFilter:
@@ -52,6 +51,7 @@ class CertificationTotals:
 class TotalsByCertification:
     certifying: CertificationTotals
     not_certifying: CertificationTotals
+    number_of_teachers : int
     
 @dataclass
 class ReportingSummaryGrouped:

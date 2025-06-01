@@ -39,4 +39,4 @@ class UserDTO(UserBaseDTO):
 
 # Pour les cas avec relations
 class UserWithTermsDTO(UserDTO):
-    terms: List[TermDTO] = Field(default_factory=list)
+    terms: List[TermDTO] = Field(default_factory=list) 
