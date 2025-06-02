@@ -1,18 +1,16 @@
+// routes/_authenticated.tsx
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async ({ context }) => {
-    // 1. On exécute checkAuth (peut mettre à jour l’état user)
-    await context.authentication?.checkAuth()
+    // Appelle la logique de vérification centrale
+    const user = await context.authentication?.checkAuth()
 
-    // 2. On lit l’état après avoir vérifié
-    const user = context.authentication?.user ?? null
-
-    // 3. Si pas d’utilisateur, on redirige
+    // Redirige si l'utilisateur n'est pas connecté
     if (!user) {
-      throw redirect({
-        to: '/login',
-      })
+      throw redirect({ to: '/login' })
     }
+
+    return { user } // Tu peux passer le user dans le loader si tu veux
   },
 })

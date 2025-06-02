@@ -11,10 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as StatisticImport } from './routes/statistic'
 import { Route as LoginImport } from './routes/login'
-import { Route as InvoicesImport } from './routes/invoices'
-import { Route as BilanImport } from './routes/bilan'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthenticatedProfilImport } from './routes/_authenticated/profil'
@@ -23,27 +20,9 @@ import { Route as AuthenticatedAgendaImport } from './routes/_authenticated/agen
 
 // Create/Update Routes
 
-const StatisticRoute = StatisticImport.update({
-  id: '/statistic',
-  path: '/statistic',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const InvoicesRoute = InvoicesImport.update({
-  id: '/invoices',
-  path: '/invoices',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const BilanRoute = BilanImport.update({
-  id: '/bilan',
-  path: '/bilan',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -94,32 +73,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedImport
       parentRoute: typeof rootRoute
     }
-    '/bilan': {
-      id: '/bilan'
-      path: '/bilan'
-      fullPath: '/bilan'
-      preLoaderRoute: typeof BilanImport
-      parentRoute: typeof rootRoute
-    }
-    '/invoices': {
-      id: '/invoices'
-      path: '/invoices'
-      fullPath: '/invoices'
-      preLoaderRoute: typeof InvoicesImport
-      parentRoute: typeof rootRoute
-    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/statistic': {
-      id: '/statistic'
-      path: '/statistic'
-      fullPath: '/statistic'
-      preLoaderRoute: typeof StatisticImport
       parentRoute: typeof rootRoute
     }
     '/_authenticated/agenda': {
@@ -167,10 +125,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
-  '/bilan': typeof BilanRoute
-  '/invoices': typeof InvoicesRoute
   '/login': typeof LoginRoute
-  '/statistic': typeof StatisticRoute
   '/agenda': typeof AuthenticatedAgendaRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profil': typeof AuthenticatedProfilRoute
@@ -179,10 +134,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
-  '/bilan': typeof BilanRoute
-  '/invoices': typeof InvoicesRoute
   '/login': typeof LoginRoute
-  '/statistic': typeof StatisticRoute
   '/agenda': typeof AuthenticatedAgendaRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profil': typeof AuthenticatedProfilRoute
@@ -192,10 +144,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/bilan': typeof BilanRoute
-  '/invoices': typeof InvoicesRoute
   '/login': typeof LoginRoute
-  '/statistic': typeof StatisticRoute
   '/_authenticated/agenda': typeof AuthenticatedAgendaRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
@@ -203,35 +152,14 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | ''
-    | '/bilan'
-    | '/invoices'
-    | '/login'
-    | '/statistic'
-    | '/agenda'
-    | '/dashboard'
-    | '/profil'
+  fullPaths: '/' | '' | '/login' | '/agenda' | '/dashboard' | '/profil'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | ''
-    | '/bilan'
-    | '/invoices'
-    | '/login'
-    | '/statistic'
-    | '/agenda'
-    | '/dashboard'
-    | '/profil'
+  to: '/' | '' | '/login' | '/agenda' | '/dashboard' | '/profil'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
-    | '/bilan'
-    | '/invoices'
     | '/login'
-    | '/statistic'
     | '/_authenticated/agenda'
     | '/_authenticated/dashboard'
     | '/_authenticated/profil'
@@ -241,19 +169,13 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  BilanRoute: typeof BilanRoute
-  InvoicesRoute: typeof InvoicesRoute
   LoginRoute: typeof LoginRoute
-  StatisticRoute: typeof StatisticRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  BilanRoute: BilanRoute,
-  InvoicesRoute: InvoicesRoute,
   LoginRoute: LoginRoute,
-  StatisticRoute: StatisticRoute,
 }
 
 export const routeTree = rootRoute
@@ -268,10 +190,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_authenticated",
-        "/bilan",
-        "/invoices",
-        "/login",
-        "/statistic"
+        "/login"
       ]
     },
     "/": {
@@ -285,17 +204,8 @@ export const routeTree = rootRoute
         "/_authenticated/profil"
       ]
     },
-    "/bilan": {
-      "filePath": "bilan.tsx"
-    },
-    "/invoices": {
-      "filePath": "invoices.tsx"
-    },
     "/login": {
       "filePath": "login.tsx"
-    },
-    "/statistic": {
-      "filePath": "statistic.tsx"
     },
     "/_authenticated/agenda": {
       "filePath": "_authenticated/agenda.tsx",

@@ -17,7 +17,7 @@ import {
   navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu"
 
-import { Menu, UserCircle, LogOut, Sun, Moon } from "lucide-react"
+import { Menu,  UserCircle, LogOut, Sun, Moon } from "lucide-react"
 import { useAuthStore } from '@/stores/useAuthStore'
 
 import { useTheme } from "@/providers/theme-provider"

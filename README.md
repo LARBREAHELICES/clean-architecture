@@ -78,6 +78,8 @@ alembic upgrade head
 # initialisation
 alembic downgrade base
 alembic upgrade head
+
+alembic current
 ```
 
 

@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from uuid import UUID
 
 from app.application.dtos.term_dto import TermDTO
-
+from app.application.dtos.role_dto import RoleDTO
 
 # Base commune utilisée en interne (app + infra)
 class UserBaseDTO(BaseModel):
@@ -11,6 +11,7 @@ class UserBaseDTO(BaseModel):
     bonus: float
     email: Optional[str]
     is_active: bool
+    role : Optional[RoleDTO]
 
     model_config = {
         "from_attributes": True

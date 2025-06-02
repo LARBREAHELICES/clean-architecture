@@ -1,28 +1,17 @@
-import { createRootRouteWithContext, Outlet, Link } from "@tanstack/react-router"
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-import type { AuthContext } from '@/hooks/useAuth'
-import { useAuthStore } from '@/stores/useAuthStore'
-import {ThemeProvider} from "@/providers/theme-provider"
-import { NavigationMenuMain } from '@/components/molecules/NavigationMenuMain'
+import { ThemeProvider } from "@/providers/theme-provider"
+import { type RouterContext} from "../router"
 
-import  DashboardLayout  from '@/components/templates/dashboard/DashboardLayout'
-
-import { UserCircle } from 'lucide-react' 
-
-type RootContext ={
-    authentication : AuthContext
-}
-
-export const Route = createRootRouteWithContext<RootContext>()({
+export const Route = createRootRouteWithContext<RouterContext>()({
 
   component: () => {
-    const { user, logout } = useAuthStore()
 
     return (
-      <DashboardLayout>
+      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
           <Outlet />
-          <TanStackRouterDevtools />
-      </DashboardLayout>
+        <TanStackRouterDevtools />
+      </ThemeProvider>
     )
   },
 })

@@ -18,7 +18,8 @@
     "hooks": "@/hooks",
     "pages": "@/pages",
     "stores": "@/stores",
-    "providers": "@/providers"
+    "providers": "@/providers",
+    "data": "@/data"
   },
   "iconLibrary": "lucide"
 }

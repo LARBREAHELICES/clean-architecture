@@ -2,7 +2,7 @@ from app.domain.interfaces.UserServiceProtocol import UserServiceProtocol
 from app.domain.interfaces.SecurityServiceProtocol import SecurityServiceProtocol
 from app.application.dtos.user_dto import UserDTO, UserCreateDTO
 
-from app.application.mappers.user_mapper import domain_to_dto_user_dto
+from app.application.mappers.user_mapper import domain_to_user_dto
 
 class CreateUserUseCase:
     def __init__(
@@ -23,4 +23,4 @@ class CreateUserUseCase:
 
         # 3. Retourne un DTO pour la réponse
         
-        return domain_to_dto_user_dto(created_user)
+        return domain_to_user_dto(created_user)

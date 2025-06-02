@@ -12,6 +12,8 @@ from app.infrastructure.db.models.User_Term_DB import User_Term_DB
 
 from app.infrastructure.db.models.ReportingSummaryDB import ReportingSummaryDB
 
+from  app.infrastructure.db.models.RoleDB import RoleDB
+
 # Créer un moteur
 engine = create_engine(settings.database_url)
 

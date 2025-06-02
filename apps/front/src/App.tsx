@@ -1,8 +1,21 @@
+import { HomeLayout } from "./components/templates/HomeLayout"
 
+import { Link } from "@tanstack/react-router"
 
 export default function App() {
 
   return(
-     <p>Hello</p>
+      <HomeLayout>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+            <li>
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
+          </ul>
+        </nav>
+      </HomeLayout>
   );
 }
